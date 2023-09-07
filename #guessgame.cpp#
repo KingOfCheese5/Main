@@ -12,15 +12,17 @@ int main() {
 
   bool playing = true;
 
-  while(playing == true) {
-
-    if(input > random){
-      cout << input << endl;
-      
-    }
+  while(bool == true) {
     
+    if(input > random) {
+      cout <<
+	
+    }
   }
   
+  cin >> input;
+  //cout << input << endl;
+
   if(input > 0){
     cout << random << endl;
   }
