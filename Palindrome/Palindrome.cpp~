@@ -1,0 +1,15 @@
+#include <iostream>
+
+using namespace std;
+
+//drivers code
+int main() {
+  char str[5];
+  cin >> str;
+
+  cout << str << endl;
+  
+
+
+  return 0;
+}
