@@ -1,0 +1,63 @@
+#include <iostream>
+
+using namespace std;
+
+char board[4][4];
+
+void printBoard() {
+  for(int i = 0; i < 4; i++) {
+    for(int j = 0; j < 4; j++) {
+      board[i][j] = '-';
+
+    } cout << endl;
+  }
+    board [0][0] = ' ';
+    board [0][1] = '1';
+    board [0][2] = '2';
+    board [0][3] = '3';
+
+    board [1][0] = '1';
+    board [2][0] = '2';
+    board [3][0] = '3';
+
+    for(int i = 0; i < 4; i++) {
+      for(int j = 0; j < 4; j++) {
+        cout << board[i][j];
+      } cout << endl;
+    }
+}
+
+int main() {
+  int blank = 0;
+  int xmove = 1;
+  int omove = 2;
+  int scoreO = 0;
+  int scoreX = 0;
+  int ties = 0;
+  int row = 0;
+  int col = 0;
+  bool playing = true;
+
+  while(playing == true) {
+    printBoard();
+    cout << "Enter a row" << endl;
+    cin >> row;
+    cout << "Enter a column" << endl;
+    cin >> col;
+    if (0 < row <= 3 || 0 < col <= 3) {
+      cout << row << ", " << col << endl;
+
+      if board[row][column] == '-' {
+	  if (turn == xmove) {
+	    board[row][column] = 
+	}
+    }
+    else {
+      cout << "yuh" << endl;
+    }
+    playing = false;
+    
+  }
+    
+  return 0;
+}
