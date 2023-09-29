@@ -4,38 +4,30 @@ using namespace std;
 
 void printBoard();
 
-char board[4][4];
+char board[3][3];
 int xmove = 1;
-int omove = 2;
+int omove = 1;
 
-void printBoard() {
-  for(int i = 0; i < 4; i++) {
-    for(int j = 0; j < 4; j++) {
-      board[i][j] = '-';
-
-    } cout << endl;
+void printBoard(char board[3][3]) {//Prints the board
+  cout << endl;
+  cout << "  0 1 2" << endl;
+  cout << "0 ";
+  for (int i = 0; i < 3; i++) {//Creates the 1 row
+    cout << board[i][0] << " ";
   }
-    board [0][0] = ' ';
-    board [0][1] = '1';
-    board [0][2] = '2';
-    board [0][3] = '3';
+  cout << endl;
+  cout << "1 ";
+  for (int i = 0; i < 3; i++) {//Creates the 2 row
+    cout << board[i][1] << " ";
+  }
+  cout << endl;
+  cout << "2 ";
+  for (int i = 0; i < 3; i++) {//Creates the 3 row
+    cout << board[i][2] << " ";
+  }
+  cout << endl; 
+} 
 
-    board [1][0] = '1';
-    board [2][0] = '2';
-    board [3][0] = '3';
-
-    for(int i = 0; i < 4; i++) {
-      for(int j = 0; j < 4; j++) {
-	if(board[i][j] == 'X') {
-	  board[i][j] = 'X';
-	}
-	if(board[i][j] == 'O') {
-	  board[i][j] = 'O';
-	}
-        cout << board[i][j];
-      } cout << endl;
-    }
-}
 
 int main() {
   int blank = 0;
@@ -44,11 +36,13 @@ int main() {
   int ties = 0;
   int row = 0;
   int col = 0;
+  char xMove = 'X';
+  char oMove = 'O';
   bool playing = true;
   int turn = 1;
 
   while(playing == true) {
-    printBoard();
+    printBoard(board);
     cout << "Enter a row" << endl;
     cin >> row;
     cout << "Enter a column" << endl;
@@ -56,17 +50,17 @@ int main() {
     if (0 < row <= 3 || 0 < col <= 3) {
       cout << row << ", " << col << endl;
 
-      if (board[row][col] == '-') {
+      if (board[row][col] != xMove || board[row][col] != oMove) {
 	  if (turn == xmove) {
-	    board[row][col] = 'X';
+	    board[row][col] = xMove;
 	    cout << board[row][col] << endl;
 	    cout << "xmove" << endl;
-	    printBoard();
+	    printBoard(board);
 	  }
 	  else if (turn == omove) {
-	    board[row][col] = omove;
+	    board[row][col] = oMove;
 	    cout << "omove" << endl;
-	    printBoard();
+	    printBoard(board);
 	  }
 	}
     }
