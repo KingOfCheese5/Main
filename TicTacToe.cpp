@@ -1,36 +1,11 @@
 #include <iostream>
+#include <cstring>
+#include <cctype>
 
 using namespace std;
 
-void printBoard();
-
-char board[3][3];
-int xmove = 1;
-int omove = 1;
-
-void printBoard(char board[3][3]) {//Prints the board
-  cout << endl;
-  cout << "  0 1 2" << endl;
-  cout << "0 ";
-  for (int i = 0; i < 3; i++) {//Creates the 1 row
-    cout << board[i][0] << " ";
-  }
-  cout << endl;
-  cout << "1 ";
-  for (int i = 0; i < 3; i++) {//Creates the 2 row
-    cout << board[i][1] << " ";
-  }
-  cout << endl;
-  cout << "2 ";
-  for (int i = 0; i < 3; i++) {//Creates the 3 row
-    cout << board[i][2] << " ";
-  }
-  cout << endl; 
-} 
-
 
 int main() {
-  int blank = 0;
   int scoreO = 0;
   int scoreX = 0;
   int ties = 0;
@@ -39,38 +14,98 @@ int main() {
   char xMove = 'X';
   char oMove = 'O';
   bool playing = true;
-  int turn = 1;
+  int turn = 0;
+  int xturn = 0;
+  int oturn = 1;
+  char start = true;
 
-  while(playing == true) {
-    printBoard(board);
+  char board[4][4];
+
+  board[0][0] = ' ';
+  board[1][0] = '1';
+  board[2][0] = '2';
+  board[3][0] = '3';
+  board[0][1] = '1';
+  board[0][2] = '2';
+  board[0][3] = '3';
+
+  while(playing == true) { 
+    if(start == true) {
+      for(int i = 1; i < 4; i++) {
+	for(int j = 1; j < 4; j++) {
+	  board[i][j] = ' ';
+	}
+      }
+    } start = false;
+      
+
+  
+  for(int i = 0; i < 4; i++) {
+    for(int j = 0; j < 4; j++) {
+      if(j < 3) {
+	cout << board[i][j];
+      }
+      if(j == 3) {
+	cout << board[i][j] << endl;
+      }
+    }
+  }
+
+  
+  if(turn == xturn) {
+    //X Turn
+    //Get input values
+    cout << endl;
     cout << "Enter a row" << endl;
     cin >> row;
-    cout << "Enter a column" << endl;
+    cout << "Enter a Col" << endl;
     cin >> col;
-    if (0 < row <= 3 || 0 < col <= 3) {
-      cout << row << ", " << col << endl;
-
-      if (board[row][col] != xMove || board[row][col] != oMove) {
-	  if (turn == xmove) {
-	    board[row][col] = xMove;
-	    cout << board[row][col] << endl;
-	    cout << "xmove" << endl;
-	    printBoard(board);
+    
+    if(board[row][col] = ' ') {
+      board[row][col] = xMove;
+      
+      for(int i = 0; i < 4; i++) {
+	for(int j = 0; j < 4; j++) {
+	  if(j < 3) {
+	    cout << board[i][j];
 	  }
-	  else if (turn == omove) {
-	    board[row][col] = oMove;
-	    cout << "omove" << endl;
-	    printBoard(board);
+	  if(j == 3) {
+	    cout << board[i][j] << endl;
 	  }
 	}
+      }
     }
-      
-    else {
-      cout << "yuh" << endl;
-    }
-    playing = false;
+    turn = oturn;
+  }
+
+  if(turn == oturn) {
+    //O Turn
+    //Get input values
+    cout << endl;
+    cout << "Enter a row" << endl;
+    cin >> row;
+    cout << "Enter a Col" << endl;
+    cin >> col;
     
+    if(board[row][col] = ' ') {
+      board[row][col] = oMove;
+
+      for(int i = 0; i < 4; i++) {
+	for(int j = 0; j < 4; j++) {
+	  if(j < 3) {
+	    cout << board[i][j];
+	  }
+	  if(j == 3) {
+	    cout << board[i][j] << endl;
+	  }
+	}
+      }
+    }
+    
+    turn = xturn;
   }
     
-  return 0;
+  }
+  return 0; 
 }
+
