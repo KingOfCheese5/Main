@@ -1,0 +1,22 @@
+#include <iostream>
+#include <cstring>
+#include <cctype>
+
+using namespace std;
+char input[81];
+
+struct Student {
+  char first[81];
+  char last[81];
+  int studentID = 0;
+  float GPA = 0;
+}
+  
+
+int main() {
+  vector<Student*>* StudentList = new vector<Student*>();
+  cin.get(input, 81);
+  cout << input;
+
+  return 0;
+}
