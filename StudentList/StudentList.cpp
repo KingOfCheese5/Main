@@ -8,6 +8,7 @@
 #include <cstring>
 #include <cctype>
 #include <vector>
+#include <iomanip>
 
 //initialize varaibles
 using namespace std;
@@ -120,7 +121,7 @@ void print(vector<Student*>*vect) {
     cout << (*iter)->first << " "
          << (*iter)->last << ", "
          << (*iter)->studentID << ", "
-         << (*iter)->GPA << endl;
+         << fixed << setprecision(2) << (*iter)->GPA << endl;
   }
   cout << " " << endl;
   
