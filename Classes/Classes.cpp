@@ -1,6 +1,8 @@
 #include <iostream>
 #include <cstring>
 #include <vector>
+#include "Media.h"
+#include "VideoGames.h"
 
 using namespace std;
 void ADD(vector<Media*>* media);
@@ -12,16 +14,15 @@ int main() {
   char search1[] = "SEARCH";
   char delete1[] = "DELETE";
   char quit1[] = "QUIT";
-
+ 
   vector<Media*>* media = new vector<Media*>();
 
   while(running == true) {
+    
     cout << endl;
     cout << "Enter ADD, SEARCH, DELETE to access files." << endl;
     cout << "Else, enter QUIT to exit program" << endl;
-    cin.clear();
-    cin.ignore(81, '\n');
-    cin.get(input, 81);
+    cin.getline(input, 81, '\n');
 
     for(int i = 0; i < strlen(input); i++){
       //Helped by Ethan Kusse, checks for non-alphabet and removes them
@@ -30,8 +31,8 @@ int main() {
         i--;
       }
     }
-    if(strcmp(input, add1) == 0) {
-      ADD(vector<Media*>* media);
+    if(strcmp(input, "ADD") == 0) {
+      ADD(media);
     }
     if(strcmp(input, search1) == 0) {
       cout << "strcmp working search" << endl;
@@ -59,12 +60,21 @@ void ADD(vector<Media*>* media) {
   
   while(running == true) {
     cout << "What type of media would you like to add: VIDEOGAMES, MUSIC, or MOVIES?" << endl;
-    cin.clear();
-    cin.ignore(81, '\n');
-    cin.get(input, 81);
+    cin.getline(input, 81, '\n');
 
-    cout << input << endl;
-    return 0;
+    if(strcmp(input, games) == 0) {
+      cout << "Games" << endl;
+      VideoGames* videogames = new VideoGames();
+      media->push_back(videogames);
+      running = false;
+    }
+    if(strcmp(input, music) == 0) {
+      cout << "Music" << endl;
+    }
+    if(strcmp(input, movies) == 0) {
+      cout << "Movies" << endl;
+    }
+
+    running = false;
   }
-  
 }
