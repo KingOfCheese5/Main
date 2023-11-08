@@ -13,12 +13,12 @@ Media::Media(){
   cin >> title;
   cin.ignore(10000, '\n');
 
-  while(running = true){
+  while(running == true){
     cout << "Enter year media was released: " << endl;
     cin.clear();
     cin >> year;
-    if(year == 0){
-      running = true;
+
+    if(year = 0){
       cout << "Could not read" << endl;
     }else{
       running = false;

@@ -3,7 +3,8 @@
 #include <iostream>
 #include "Media.h"
 
-//videogames structural data
+//videogames struct
+
 class VideoGames : public Media{
 public:
   VideoGames();

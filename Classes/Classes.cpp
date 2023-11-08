@@ -3,9 +3,12 @@
 #include <vector>
 #include "Media.h"
 #include "VideoGames.h"
+#include "Music.h"
+#include "Movies.h"
 
 using namespace std;
 void ADD(vector<Media*>* media);
+void SEARCH(vector<Media*>* media);
 
 int main() {
   bool running = true;
@@ -35,7 +38,7 @@ int main() {
       ADD(media);
     }
     if(strcmp(input, search1) == 0) {
-      cout << "strcmp working search" << endl;
+      SEARCH(media);
     }
     if(strcmp(input, delete1) == 0) {
       cout << "strcmp working delete" << endl;
@@ -63,18 +66,25 @@ void ADD(vector<Media*>* media) {
     cin.getline(input, 81, '\n');
 
     if(strcmp(input, games) == 0) {
-      cout << "Games" << endl;
       VideoGames* videogames = new VideoGames();
       media->push_back(videogames);
       running = false;
     }
     if(strcmp(input, music) == 0) {
-      cout << "Music" << endl;
+      Music* music = new Music();
+      media->push_back(music);
+      running = false;
     }
     if(strcmp(input, movies) == 0) {
-      cout << "Movies" << endl;
+      Movies* movies = new Movies();
+      media->push_back(movies);
+      running = false;
     }
 
     running = false;
   }
+}
+
+void SEARCH(vector<Media*>* media) {
+  cout << "Virat Kohli my GOAT" << endl;
 }

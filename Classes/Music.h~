@@ -1,0 +1,11 @@
+#ifndef MUSIC
+#define MUSIC
+#include <iostream>
+#include "Media.h"
+
+//Music struct
+class Music : public Media{
+ public:
+  Music();
+  
+  
