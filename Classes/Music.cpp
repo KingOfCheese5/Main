@@ -5,22 +5,23 @@ using namespace std;
 
 //input music info
 Music::Music() : Media(){
-  cout << "Enter Artist" << endl;
-  cin.getline(artist, 81, '\n');
-  cout << "What is the duration of the song(seconds)?" << endl;
+  cout << "Enter the name of the artist" << endl;
+  cin >> artist;
   cin.clear();
+  cin.ignore(10000, '\n');
+  cout << "What is the duration of the song(seconds)?" << endl;
   cin >> duration;
-  cin.ignore(1000, '\n');
-  while(rating == 0) {
-    cout << "Enter a non-zero rating" << endl;
-    cin.clear();
-    cin >> rating;
-    cin.ignore(1000, '\n');
-  }
+  cin.clear();
+  cin.ignore(10000, '\n');
+  cout << "Enter the publisher of the song" << endl;
+  cin >> publisher;
+  cin.clear();
+  cin.ignore(10000, '\n');
 }
+
 
 //Return music info
 void Music::getInformation() {
-  cout << "Track: " << title << ", Year: " << year << ", Artist: " << artist << ", Rating: " << endl;
+  cout << "Track: " << title << ", Year: " << year << ", Artist: " << artist << ", Publisher: " << publisher << ", Duration: " << duration << endl;
   return;
 }

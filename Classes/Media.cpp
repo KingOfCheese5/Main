@@ -6,25 +6,19 @@ using namespace std;
 
 //media class
 Media::Media(){
-  
-  bool running = true;
+
+  //Get title and year for all types of media
   cout << "Enter title of media: " << endl;
-  cin.clear();
   cin >> title;
+  cin.clear();
   cin.ignore(10000, '\n');
 
-  while(running == true){
-    cout << "Enter year media was released: " << endl;
-    cin.clear();
-    cin >> year;
-
-    if(year = 0){
-      cout << "Could not read" << endl;
-    }else{
-      running = false;
-    }
-  }
+  cout << "Enter year media was released: " << endl;
+  cin >> year;
+  cin.clear();
+  cin.ignore(10000, '\n');
 }
+
 //getter functions
 char* Media::getTitle(){
   return title;

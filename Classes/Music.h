@@ -7,7 +7,7 @@
 class Music : public Media {
  public:
   Music();
-  int rating = 0;
+  char publisher[80];
   int duration = 0; 
   char artist[80];
   void getInformation();
