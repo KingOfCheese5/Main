@@ -1,3 +1,8 @@
+//Name: Levi Lao
+//Project: Classes
+//Allow for users to input, search, and delete various entries using classes and vectors
+//Project was assisted by Neel Madala and Ethan Kusse
+
 #include <iostream>
 #include <cstring>
 #include <vector>
