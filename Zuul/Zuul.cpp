@@ -1,7 +1,10 @@
 #include <iostream>
 #include <cstring>
 #include <vector>
+#include <map>
 #include "Room.h"
+
+void createRooms(vector<room*> &Rooms);
 
 int main () {
   cout << endl;
@@ -11,8 +14,8 @@ int main () {
   char input[81];
   cout << "Your commands are HELP, MOVE, INVENTORY, GET, and DROP" << endl;
 
-  vector<Room*>* rooms = new vector<Room*>();
-  vector<Item*>* inventory = new vector<Item*>();
+  vector<Room*> rooms;
+  vector<Item*> inventory;
   
   bool running = true;
   while(running == true) {
@@ -20,7 +23,13 @@ int main () {
     cout << "What would you like to do?" << endl;
     cin.getline(input, 81, '\n');
 
+    return 0;
+  }
+}
 
+void createRooms(vector<room*> &Rooms) {
+  //initialize rooms
+  
     Room* mainStreet = new room();
     Room* eastStreet = new room();
     Room* westStreet = new room();
@@ -39,8 +48,6 @@ int main () {
     Room* pool = new room();
     Room* gym = new room();
 
-
-
-
-  return 0;
+    
+    
 }

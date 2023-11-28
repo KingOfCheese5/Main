@@ -1,0 +1,18 @@
+#include <iostream>
+#include <cstring>
+#inclde "room.h"
+
+using namespace std;
+
+room::room() {
+
+}
+
+char*room::getDescription() {
+
+}
+
+void room::setRoomID(int x) {
+  roomID = x;
+}
+
