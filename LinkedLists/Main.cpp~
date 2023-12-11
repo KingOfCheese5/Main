@@ -1,0 +1,49 @@
+#include <iostream>
+#include <cstring>
+#include "Student.h"
+#include "Node.h"
+
+using namespace std;
+
+int main() {
+
+  //Create and assign students
+
+  //Student constructor
+  Student* firstStudent = new Student();
+  Student* secondStudent = new Student();
+
+  char studentOneFirst[81] = "Kevin";
+  char studentTwoFirst[81] = "Nikhil";
+
+  char studentOneLast[81] = "Yu";
+  char studentTwoLast[81] = "Nayak";
+
+  //Strcpy information into students
+  strcpy(firstStudent->firstName, studentOneFirst);
+  strcpy(secondStudent->firstName, studentTwoFirst);
+
+  strcpy(firstStudent->lastName, studentOneLast);
+  strcpy(secondStudent->lastName, studentTwoLast);
+
+  //Construct nodes
+  
+  Node* nodeOne = new Node(firstStudent);
+  Node* nodeTwo = new Node(secondStudent);
+
+  //Set node one to node two
+  
+  nodeOne->setNext(nodeTwo);
+
+  //Get student information using getStudent
+
+  cout << "The first obituary reads " << nodeOne->getStudent()->getFirstName() << " " << nodeOne->getStudent()->getLastName() << endl;
+  cout << "The second obituary reads " << nodeTwo->getStudent()->getFirstName() << " " << nodeTwo->getStudent()->getLastName() << endl;
+  cout << endl;
+
+  //Test if getNext works, should print 'Kevin' then 'Nikhil'
+
+  cout << "Today's funeral processions will start with: " << nodeOne->getStudent()->getFirstName() << " then be followed by: " << nodeOne->getNext()->getStudent()->getFirstName() << endl;
+}
+
+
