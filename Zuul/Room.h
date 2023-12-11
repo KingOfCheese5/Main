@@ -35,6 +35,11 @@ class room{
   void setExit(char* dir, room* room);
   room* getExit(char* input);
 
+  bool getTerquavion;
+  bool getTessa;
+  bool getEli;
+  bool getVictor;
+  bool getSaahil;
   
 
 };
