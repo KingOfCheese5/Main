@@ -148,8 +148,27 @@ int main () {
   Rooms.push_back(athleticOffice);
   Rooms.push_back(pool);
   Rooms.push_back(gym);
+
+
+  //Idea from Roger Li
+  //Instead of making vector of "items", set items to booleans
+  //Edit properties of room pointers so items can be attached
   
-  //vector<Person*> car;
+  eastStreet->getTerquavion = true;
+  bool playerGetTerquavion = false;
+  parkingLot->getTessa = true;
+  bool playerGetTessa = false;
+  profOffice->getEli = true;
+  bool playerGetEli = false;
+  gym->getVictor = true;
+  bool playerGetVictor = false;
+  tennisCourts->getSaahil = true;
+  bool playerGetSaahil = false;
+
+  
+  //current room points to a room in the vector, starting in mainStreet
+  room* currentRoom = mainStreet;
+  
   
   bool running = true;
   while(running == true) {
@@ -157,6 +176,66 @@ int main () {
     cout << "What would you like to do?" << endl;
     cin.getline(input, 81, '\n');
 
-    return 0;
+    if(strcmp(input, "HELP") == 0) {
+      
+      cout << "Enter MOVE, GO, CAR, or GE to progress the game" << endl;
+      cout << "Pick up your friends and head to the party" << endl;
+
+    }
+    
+    if(strcmp(input, "MOVE") == 0) {
+
+      bool stillRunning = true;
+      while(stillRunning == true) {
+
+	cout << "What direction?";
+	char input2[81];
+	cin.getline(input2, 81, '\n');
+
+	if(currentRoom->getExit(direction) == NULL) {
+	  cout << "No exit there" << endl;
+	}
+	else {
+	  currentRoom = currentRoom->getExit(direction);
+	  
+	  else if ((currentRoom == westDorms) && (playerGetTerquavion == true)
+		   && (playerGetTessa == true) && (playerGetEli == true)
+		   && (playerGetVictor == true) && (playerGetSaahil == true)) {
+
+	   cout << "Hey you're late to the party. Come on in!" << endl;
+	   running = false;
+	   stillRunning = false;
+	   return 0;
+	  }
+	}
+
+	else {
+
+	  cout << currentRoom->getDescription() << endl;
+	  cout << "Exits: " << endl;
+
+
+	}
+      }
+
+      cout << "working move" << endl;
+
+    }
+    
+    if(strcmp(input, "CAR") == 0) {
+
+      cout << "working car" << endl;
+
+    }
+    if(strcmp(input, "GET") == 0) {
+
+      cout << "working get" << endl;
+      
+    }
+    if(strcmp(input, "DROP") == 0) {
+
+      cout << "working drop" << endl;
+      
+    }
   }
 }
