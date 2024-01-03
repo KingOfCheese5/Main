@@ -9,10 +9,13 @@ class Student {
 
  public:
   //Functions for Student class
+  Student();
   char* getFirstName();
   char* getLastName();
-  int getStudentID();
+  int getID();
   float getGPA();
+  void setID(int newID);
+  void setGPA(float newGPA);
   //all variables are public
   char firstName[81];
   char lastName[81];
