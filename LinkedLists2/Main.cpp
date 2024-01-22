@@ -1,3 +1,7 @@
+//Name: Levi Lao
+//Date: 1/22/24
+//Project: Utilize linked lists to alter student lists, being able to add, delete, print, and average the values of the students
+
 #include <iostream>
 #include <cstring>
 #include <iomanip>
@@ -44,6 +48,7 @@ int main() {
     cin.ignore(81, '\n');
 
     //if statements for commands
+    //add student to list
     if(strcmp(input, addl) == 0) {
       Student* inputStudent = new Student();
 
@@ -74,12 +79,18 @@ int main() {
       
       add(head, head, head, inputNode);
     }
-    
+    //print out all students
     else if(strcmp(input, printl) == 0) {
       print(head);
     }
+    //take in ID and delete student
     else if(strcmp(input, deletel) == 0) {
-      cout << "delete" << endl;
+      cout << "Enter the ID of the student you want to delete" << endl;
+      int studentID;
+      cin >> studentID;
+      cin.get();
+
+      remove(head, head, head, studentID);
     }
     else if(strcmp(input, quitl) == 0) {
       cout << "Exited" << endl;
@@ -96,7 +107,6 @@ void add(Node* &head, Node* curr, Node* prev, Node* inputNode) {
   //set new head
   if(head == NULL) {
     head = inputNode;
-    cout << "added head" << endl;
   }
   else {
     //if input is smaller than head, place in front of head
@@ -114,6 +124,7 @@ void add(Node* &head, Node* curr, Node* prev, Node* inputNode) {
      else if(curr->getNext() == NULL) {
        curr->setNext(inputNode);
      }
+     //recursion element
      else {
        add(head, curr->getNext(), curr, inputNode);
      }
@@ -124,6 +135,7 @@ void add(Node* &head, Node* curr, Node* prev, Node* inputNode) {
 
 void print(Node* head) {
 
+  //empty list
   if(head == NULL) {
     cout << "The list is empty" << endl;
     return;
@@ -132,11 +144,8 @@ void print(Node* head) {
   cout << head->getStudent()->firstName << " " << head->getStudent()->lastName;
   cout << ", " << head->getStudent()->getID() << ", " << fixed << setprecision(2) << head->getStudent()->getGPA() << endl;
 
-  //cout << head->getNext()->firstName << " " << head->getNext()->lastName;
-  //cout << ", " << head->getNext()->getID() << ", " << fixed << setprecision(2) << head->getNext()->getGPA() << endl;
   
   if(head->getNext() != NULL){
-    cout << "Next found" << endl;
     print(head->getNext());
   }
   return;
@@ -149,25 +158,46 @@ void remove(Node* &head, Node* curr, Node* prev, int ID) {
     cout << "The list is empty" << endl;
     return;
   }
-  if(curr = NULL) {
+  //can't find student
+  if(curr == NULL) {
     cout << "Could not find student" << endl;
     return;
   }
-  if(curr->getStudent->getID == ID) {
-
-    if(head->getID == ID) {
+  if(curr->getStudent()->getID() == ID) {
+    cout << "debug" << endl;
+    
+    //if head is only component
+    if(head->getStudent()->getID() == ID) {
       head->~Node();
       head = NULL;
       return;
     }
 
-    else if(curr = head) {
+    //if head needs to be deleted
+    else if(curr == head) {
       Node* tempNode = head->getNext();
       head->~Node();
       head = tempNode;
+      cout << "debug3" << endl;
       
     }
-    
+    // Alter getNext of the deleted node
+    else if (curr != head && curr->getNext() != NULL) {
+      Node* tempNode2 = curr->getNext();
+      prev->setNext(tempNode2);
+      curr->~Node();
+    }
+    //Deleted node has no next 
+    else if (curr != head && curr->getNext() == NULL) {
+      Node* nullNode = NULL;
+      prev->setNext(nullNode);
+      curr->~Node();
+    }
   }
-
+  //recursion element
+  else {
+    remove(head, curr->getNext(), curr, ID);
+  }
+    
 }
+
