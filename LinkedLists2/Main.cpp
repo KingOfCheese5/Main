@@ -10,22 +10,27 @@
 
 using namespace std;
 
+//initialize functions
 void add(Node* &head, Node* curr, Node* prev, Node* inputNode);
 void print(Node* head);
 void remove(Node* &head, Node* curr, Node* prev, int ID);
+void average(Node* head, int total, float averageTotal);
 
 int main() {
 
+  //copy in function commands
   bool running = true;;
   char addCopy[] = "add";
   char printCopy[] = "print";
   char deleteCopy[] = "delete";
   char quitCopy[] = "quit";
+  char averageCopy[] = "average";
 
   char addl[4];
   char printl[6];
   char deletel[7];
   char quitl[5];
+  char average1[8];
 
   Node* head = NULL;
   Node* cur;
@@ -34,7 +39,7 @@ int main() {
   while(running == true) {
     
     cout << endl;
-    cout << "Enter add, print, or delete to alter the student list" << endl;
+    cout << "Enter add, print, delete, or average to alter the student list" << endl;
     cout << "If not, enter quit to exit program" << endl;
 
     //copy over strings
@@ -43,7 +48,8 @@ int main() {
     strcpy(printl, printCopy);
     strcpy(deletel, deleteCopy);
     strcpy(quitl, quitCopy);
-  
+    strcpy(average1, averageCopy);
+
     cin.get(input, 81);
     cin.ignore(81, '\n');
 
@@ -92,6 +98,14 @@ int main() {
 
       remove(head, head, head, studentID);
     }
+    //take averages of all the elements
+    else if(strcmp(input, average1) == 0) {
+      int totalElements = 0;
+      float toAverage;
+      average(head, totalElements, toAverage);
+    }
+
+    //exit program
     else if(strcmp(input, quitl) == 0) {
       cout << "Exited" << endl;
       running = false;
@@ -144,7 +158,7 @@ void print(Node* head) {
   cout << head->getStudent()->firstName << " " << head->getStudent()->lastName;
   cout << ", " << head->getStudent()->getID() << ", " << fixed << setprecision(2) << head->getStudent()->getGPA() << endl;
 
-  
+  //recursion element
   if(head->getNext() != NULL){
     print(head->getNext());
   }
@@ -197,7 +211,24 @@ void remove(Node* &head, Node* curr, Node* prev, int ID) {
   //recursion element
   else {
     remove(head, curr->getNext(), curr, ID);
+  }    
+}
+
+void average(Node* head, int total, float averageTotal) {
+
+  //if list is empty
+  if(head == NULL && total == 0) {
+    cout << "There are no elements to average" << endl;
   }
-    
+  //add to total and call average() again
+  else if(head != NULL){
+    averageTotal = averageTotal + head->getStudent()->getGPA();
+    total = total + 1;
+    average(head->getNext(), total, averageTotal);
+  }
+  else {
+    //print
+    cout << "Average: " << fixed << setprecision(2) << (averageTotal/total) << endl;
+  }
 }
 
