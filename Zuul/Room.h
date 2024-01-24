@@ -32,9 +32,10 @@ class room{
   char* getDescription();
 
   void setRoomID(int x);
-  void setExit(char* dir, room* room);
+  void setExit(char* dir, room* r);
   room* getExit(char* input);
-
+  const char* listExits();
+  
   bool getTerquavion;
   bool getTessa;
   bool getEli;
