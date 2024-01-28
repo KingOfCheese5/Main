@@ -180,8 +180,8 @@ void remove(Node* &head, Node* curr, Node* prev, int ID) {
   if(curr->getStudent()->getID() == ID) {
     cout << "debug" << endl;
     
-    //if head is only component
-    if(head->getStudent()->getID() == ID) {
+    //if head is only component, check that list is empty
+    if(head->getStudent()->getID() == ID && head->getNext() == NULL) {
       head->~Node();
       head = NULL;
       return;
