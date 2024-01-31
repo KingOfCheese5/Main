@@ -13,7 +13,7 @@
 using namespace std;
 
 //initialize functions
-void add(Node* &head, Node* curr, Node* prev, Node* inputNode);
+void add(Node* &head, Node* curr, Node* prev, Node* inputNode, int size, Node** &hash);
 void print(Node* head);
 void remove(Node* &head, Node* curr, Node* prev, int ID);
 
@@ -34,7 +34,12 @@ int main() {
   Node* head = NULL;
   Node* cur;
   Node* prev;
-  
+
+  Node** hash = new Node* [100];
+  for(int i = 0; i < 100; i++) {
+    hash[i] = NULL;
+  }
+    
   while(running == true) {
     
     cout << endl;
@@ -56,6 +61,9 @@ int main() {
     if(strcmp(input, addl) == 0) {
       Student* inputStudent = new Student();
 
+      //set size to variable so it can be changed later
+      int size = 100;
+      
       cout << "First Name: " << endl;
       char input[20];
       cin.get(input, 20);
@@ -81,7 +89,7 @@ int main() {
 
       Node* inputNode = new Node(inputStudent);
       
-      add(head, head, head, inputNode);
+      add(head, head, head, inputNode, size, hash);
     }
     //print out all students
     else if(strcmp(input, printl) == 0) {
@@ -108,35 +116,15 @@ int main() {
   return 0;
 }
 
-void add(Node* &head, Node* curr, Node* prev, Node* inputNode) {
+void add(Node* &head, Node* curr, Node* prev, Node* inputNode, int size, Node** &hash) {
+  student* addStudent = new student*;
+  int addID = inputNode->getStudent()->getID();
 
-  //set new head
-  if(head == NULL) {
-    head = inputNode;
-  }
-  else {
-    //if input is smaller than head, place in front of head
-     if(inputNode->getStudent()->getID() < head->getStudent()->getID()) {
-       Node* tempNode = head;
-       head = inputNode;
-       head->setNext(tempNode);
-     }
-     //place input in between two nodes
-     else if(inputNode->getStudent()->getID() < curr->getStudent()->getID()) {
-       prev->setNext(inputNode);
-       inputNode->setNext(curr);
-     }
-     //end list
-     else if(curr->getNext() == NULL) {
-       curr->setNext(inputNode);
-     }
-     //recursion element
-     else {
-       add(head, curr->getNext(), curr, inputNode);
-     }
-     return;
-  }
-  return;
+  int index = addStudent->getID() % size;
+
+  Node* tempNode = new Node();
+  tempNode->setStudent(newstudent);
+  
 }
 
 void print(Node* head) {
