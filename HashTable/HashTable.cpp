@@ -7,13 +7,14 @@
 #include <iostream>
 #include <cstring>
 #include <iomanip>
+#include <vector>
 #include "Student.h"
 #include "Node.h"
 
 using namespace std;
 
 //initialize functions
-void add(Node* &head, Node* curr, Node* prev, Node* inputNode, int size, Node** &hash);
+void add(Student* &student, vector<Student*>* &studentList, int size, Node** &hash);
 void print(Node* head);
 void remove(Node* &head, Node* curr, Node* prev, int ID);
 
@@ -32,8 +33,8 @@ int main() {
   char quitl[5];
 
   Node* head = NULL;
-  Node* cur;
-  Node* prev;
+  vector<Student*>* studentList;
+  int size = 100;
 
   Node** hash = new Node* [100];
   for(int i = 0; i < 100; i++) {
@@ -87,9 +88,9 @@ int main() {
       cin.get();
       inputStudent->setGPA(float1);
 
-      Node* inputNode = new Node(inputStudent);
+      studentList->push_back(inputStudent);
       
-      add(head, head, head, inputNode, size, hash);
+      add(inputStudent, studentList, size, hash);
     }
     //print out all students
     else if(strcmp(input, printl) == 0) {
@@ -116,33 +117,45 @@ int main() {
   return 0;
 }
 
-void add(Node* &head, Node* curr, Node* prev, Node* inputNode, int size, Node** &hash) {
-  student* addStudent = new student*;
+void add(Student* &student, vector<Student*>* &studentList, int size, Node** &hash) {
+
+  //get index for student ID
+  Node inputNode = Node(student);
   int addID = inputNode->getStudent()->getID();
+  int index = addID % 100;
 
-  int index = addStudent->getID() % size;
-
-  Node* tempNode = new Node();
-  tempNode->setStudent(newstudent);
-  
+  //if index is open, set student
+  if(hashTable[index] == NULL) {
+    hashTable[index] = inputNode;
+  }
+  //if not, allow for up to 3 collisions
+  else if(hashTable[index]->getNext() == NULL) {
+    hashTable[index]->getNext() = inputNode;
+  }
+  else if(hashTable[index]->getNext()->getNext() == NULL) {
+    hashTable[index]->getNext()->getNext() = inputNode;
+  }
+  //if collisions > 3, rehash
+  else {
+    cout << "idk how to rehash lmao" << endl;
+  }
 }
 
-void print(Node* head) {
+void print(vector<Student*>* studentList) {
 
   //empty list
-  if(head == NULL) {
+  if(studentList[0] == NULL) {
     cout << "The list is empty" << endl;
     return;
   }
-  //print out the information of the head node.
-  cout << head->getStudent()->firstName << " " << head->getStudent()->lastName;
-  cout << ", " << head->getStudent()->getID() << ", " << fixed << setprecision(2) << head->getStudent()->getGPA() << endl;
-
-  //recursion element
-  if(head->getNext() != NULL){
-    print(head->getNext());
+  //print information
+  vector<Student*>::iterator iter = studentList->begin();
+  for(iter; iter < studentList->end(); iter++) {
+    cout << (*iter)->getStudent()->getFirstName << " " <<  (*iter)->getStudent()->getLastName << endl;
+    cout << "ID: " (*iter)->getStudent()->getID() << endl;
+    cout << "GPA: " << fixed << setprecision(2) << (*iter)->getStudent()->getGPA() << endl;
+    cout << endl;
   }
-  return;
 }
 
 void remove(Node* &head, Node* curr, Node* prev, int ID) {
