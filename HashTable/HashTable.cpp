@@ -15,8 +15,9 @@ using namespace std;
 
 //initialize functions
 void add(Student* &student, vector<Student*>* &studentList, int size, Node** &hash);
-void print(Node* head);
-void remove(Node* &head, Node* curr, Node* prev, int ID);
+void print(vector<Student*>* studentList);
+void remove(vector<Student*>* studentList, int id);
+void rehash(vector<Student*>* studentList, int size);
 
 int main() {
 
@@ -44,7 +45,7 @@ int main() {
   while(running == true) {
     
     cout << endl;
-    cout << "Enter add, print, delete, or average to alter the student list" << endl;
+    cout << "Enter add, print, or delete to alter the student list" << endl;
     cout << "If not, enter quit to exit program" << endl;
 
     //copy over strings
@@ -94,7 +95,7 @@ int main() {
     }
     //print out all students
     else if(strcmp(input, printl) == 0) {
-      print(head);
+      print(studentList);
     }
     //take in ID and delete student
     else if(strcmp(input, deletel) == 0) {
@@ -103,7 +104,7 @@ int main() {
       cin >> studentID;
       cin.get();
 
-      remove(head, head, head, studentID);
+      remove(studentList, studentID);
     }
 
     //exit program
@@ -120,89 +121,67 @@ int main() {
 void add(Student* &student, vector<Student*>* &studentList, int size, Node** &hash) {
 
   //get index for student ID
-  Node inputNode = Node(student);
+  Node* inputNode = new Node(student);
   int addID = inputNode->getStudent()->getID();
   int index = addID % 100;
 
   //if index is open, set student
-  if(hashTable[index] == NULL) {
-    hashTable[index] = inputNode;
+  if(hash[index] == NULL) {
+    hash[index] = inputNode;
   }
   //if not, allow for up to 3 collisions
-  else if(hashTable[index]->getNext() == NULL) {
-    hashTable[index]->getNext() = inputNode;
+  else if(hash[index]->getNext() == NULL) {
+    hash[index]->getNext()->setNext(inputNode);
   }
-  else if(hashTable[index]->getNext()->getNext() == NULL) {
-    hashTable[index]->getNext()->getNext() = inputNode;
+  else if(hash[index]->getNext()->getNext() == NULL) {
+    hash[index]->getNext()->getNext()->setNext(inputNode);
   }
   //if collisions > 3, rehash
   else {
-    cout << "idk how to rehash lmao" << endl;
+    rehash(studentList, size);
   }
 }
 
 void print(vector<Student*>* studentList) {
 
+  cout << endl;
+  
   //empty list
-  if(studentList[0] == NULL) {
+  if(studentList->at(0) == NULL) {
     cout << "The list is empty" << endl;
     return;
   }
   //print information
   vector<Student*>::iterator iter = studentList->begin();
   for(iter; iter < studentList->end(); iter++) {
-    cout << (*iter)->getStudent()->getFirstName << " " <<  (*iter)->getStudent()->getLastName << endl;
-    cout << "ID: " (*iter)->getStudent()->getID() << endl;
-    cout << "GPA: " << fixed << setprecision(2) << (*iter)->getStudent()->getGPA() << endl;
+    cout << (*iter)->getFirstName() << " " <<  (*iter)->getLastName() << endl;
+    cout << "ID: " << (*iter)->getID() << endl;
+    cout << "GPA: " << fixed << setprecision(2) << (*iter)->getGPA() << endl;
     cout << endl;
   }
 }
 
-void remove(Node* &head, Node* curr, Node* prev, int ID) {
+void remove(vector<Student*>* studentList, int id) {
 
-  //List is empty
-  if(head == NULL) {
+  cout << endl;
+  
+  //empty list
+  if(studentList->at(0) == NULL) {
     cout << "The list is empty" << endl;
     return;
   }
-  //can't find student
-  if(curr == NULL) {
-    cout << "Could not find student" << endl;
-    return;
-  }
-  if(curr->getStudent()->getID() == ID) {
-    cout << "debug" << endl;
-    
-    //if head is only component, check that list is empty
-    if(head->getStudent()->getID() == ID && head->getNext() == NULL) {
-      head->~Node();
-      head = NULL;
-      return;
+  //iterate through list and delete ID
+  vector<Student*>::iterator iter = studentList->begin();
+  for(iter; iter < studentList->end(); iter++) {
+    if((*iter)->getID() == id) {
+      studentList->erase(iter);
     }
+  }
+  cout << "student eviscerated" << endl;
+}
 
-    //if head needs to be deleted
-    else if(curr == head) {
-      Node* tempNode = head->getNext();
-      head->~Node();
-      head = tempNode;
-      cout << "debug3" << endl;
-      
-    }
-    // Alter getNext of the deleted node
-    else if (curr != head && curr->getNext() != NULL) {
-      Node* tempNode2 = curr->getNext();
-      prev->setNext(tempNode2);
-      curr->~Node();
-    }
-    //Deleted node has no next 
-    else if (curr != head && curr->getNext() == NULL) {
-      Node* nullNode = NULL;
-      prev->setNext(nullNode);
-      curr->~Node();
-    }
-  }
-  //recursion element
-  else {
-    remove(head, curr->getNext(), curr, ID);   
-  }
+void rehash(vector<Student*>* studentList, int size) {
+  
+  Node** tempHash = new Node* [100];
+
 }
