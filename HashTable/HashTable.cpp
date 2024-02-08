@@ -17,7 +17,7 @@ using namespace std;
 void add(Student* &student, vector<Student*>* &studentList, int size, Node** &hash);
 void print(vector<Student*>* studentList);
 void remove(vector<Student*>* studentList, int id);
-void rehash(vector<Student*>* studentList, int size);
+void rehash(Node** &hash, int &size, int oldSize);
 
 int main() {
 
@@ -36,6 +36,7 @@ int main() {
   Node* head = NULL;
   vector<Student*>* studentList;
   int size = 100;
+  int newSize = 100;
 
   Node** hash = new Node* [100];
   for(int i = 0; i < 100; i++) {
@@ -123,7 +124,7 @@ void add(Student* &student, vector<Student*>* &studentList, int size, Node** &ha
   //get index for student ID
   Node* inputNode = new Node(student);
   int addID = inputNode->getStudent()->getID();
-  int index = addID % 100;
+  int index = addID % size;
 
   //if index is open, set student
   if(hash[index] == NULL) {
@@ -180,8 +181,24 @@ void remove(vector<Student*>* studentList, int id) {
   cout << "student eviscerated" << endl;
 }
 
-void rehash(vector<Student*>* studentList, int size) {
+void rehash(Node** &hash, int &size, int oldSize) {
   
-  Node** tempHash = new Node* [100];
+  Node** tempHash = new Node*[oldSize];
+  for (int i = 0; i < size; i++) {
+    tempHash[i] = studentList[i];
+  }
 
+  size = size * 2;
+  Node** newHash = new Node* [size];
+  for(int x = 0; x < size; x++) {
+    newHash[x] = NULL;
+  }
+
+  for(int i = 0; i < size; i++) {
+    if(tempHash[i] != NULL) {
+      Node* moveHash = tempHash[i];
+      
+    }
+  }
+  
 }
