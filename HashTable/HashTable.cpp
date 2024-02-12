@@ -14,10 +14,11 @@
 using namespace std;
 
 //initialize functions
-void add(Student* &student, vector<Student*>* &studentList, int size, Node** &hash);
+void add(Student* &student, vector<Student*>* &studentList, int size, int newsize, Node** &hash);
 void print(vector<Student*>* studentList);
 void remove(vector<Student*>* studentList, int id);
 void rehash(Node** &hash, int &size, int oldSize);
+void addHash(Node** &hash, Node* &node, int newIndex, int size);
 
 int main() {
 
@@ -92,7 +93,7 @@ int main() {
 
       studentList->push_back(inputStudent);
       
-      add(inputStudent, studentList, size, hash);
+      add(inputStudent, studentList, size, newSize, hash);
     }
     //print out all students
     else if(strcmp(input, printl) == 0) {
@@ -119,7 +120,7 @@ int main() {
   return 0;
 }
 
-void add(Student* &student, vector<Student*>* &studentList, int size, Node** &hash) {
+void add(Student* &student, vector<Student*>* &studentList, int size, int newsize, Node** &hash) {
 
   //get index for student ID
   Node* inputNode = new Node(student);
@@ -139,7 +140,7 @@ void add(Student* &student, vector<Student*>* &studentList, int size, Node** &ha
   }
   //if collisions > 3, rehash
   else {
-    rehash(studentList, size);
+    rehash(hash, newsize, size);
   }
 }
 
@@ -185,7 +186,7 @@ void rehash(Node** &hash, int &size, int oldSize) {
   
   Node** tempHash = new Node*[oldSize];
   for (int i = 0; i < size; i++) {
-    tempHash[i] = studentList[i];
+    tempHash[i] = hash[i];
   }
 
   size = size * 2;
@@ -196,9 +197,42 @@ void rehash(Node** &hash, int &size, int oldSize) {
 
   for(int i = 0; i < size; i++) {
     if(tempHash[i] != NULL) {
-      Node* moveHash = tempHash[i];
-      
+      int index1 = (tempHash[i]->getStudent()->getID())%size;
+      Node* moveHash1 = tempHash[i];
+       if (tempHash[i]->getNext() != NULL) {
+	 int index2 = (tempHash[i]->getNext()->getStudent()->getID())%size;
+	  Node* moveHash2 = tempHash[i]->getNext();
+	  if(tempHash[i]->getNext()->getNext() != NULL) {
+	    int index3 = (tempHash[i]->getNext()->getNext()->getStudent()->getID())%size;
+	    Node* moveHash3 = tempHash[i]->getNext()->getNext();
+	     //Make sure nothing else is after node
+	     moveHash3->setNext(NULL);
+	     addHash(newHash, moveHash3, index3, size);
+	  }
+	  moveHash2->setNext(NULL);
+          addHash(newHash, moveHash2, index2, size);
+       }
+       moveHash1->setNext(NULL);
+       addHash(newHash, moveHash1, index1, size);
     }
+    
   }
-  
+  delete[] hash;
+  //old table becomes new table
+  hash = newHash;
+}
+
+void addHash(Node** &hash, Node* &node, int newIndex, int size) {
+  if (hash[newIndex] == NULL) {
+    hash[newIndex] = node;
+  }
+  else if (hash[newIndex]->getNext() == NULL) {
+    hash[newIndex]->setNext(node);
+  }
+  else if (hash[newIndex]->getNext()->getNext() == NULL) {
+    hash[newIndex]->getNext()->setNext(node);
+  }
+  else {
+    rehash(hash, size, size);
+  }
 }
