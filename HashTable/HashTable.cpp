@@ -2,11 +2,14 @@
 //First save: 1/29/24
 //Utilize previous linkedlist code, store students in a hash table using student data. Use chaining(linked list) to deal with collisions. If there are more
 //than 3 collisions in a code, create a table and double the size of the tablet, then rehash. Additionally, make function to create a random student using
-//students from a list of random names.  
+//students from a list of random names.
+//Credit: Vikram & Roger helped with rehash, tutorialspoint helped with reading in txt file "https://www.tutorialspoint.com/cplusplus/cpp_files_streams.htm"
 
 #include <iostream>
 #include <cstring>
 #include <iomanip>
+#include <fstream>
+#include <time.h>
 #include <vector>
 #include "Student.h"
 #include "Node.h"
@@ -17,10 +20,34 @@ using namespace std;
 void add(Student* &student, vector<Student*>* &studentList, int size, int newsize, Node** &hash);
 void print(vector<Student*>* studentList);
 void remove(vector<Student*>* studentList, int id);
-void rehash(Node** &hash, int &size, int oldSize);
-void addHash(Node** &hash, Node* &node, int newIndex, int size);
+void rehash(Node** &hash, int &size, int oldSize, bool &rehashing);
+void addHash(Node** &hash, Node* &node, int newIndex, int size, bool &rehashing);
+void createRandom(vector<Student*>* &studentList, vector<char*> first, vector<char*> last, int people, int size, int newSize, Node** &hash);
 
 int main() {
+
+  vector<char*> firstNames;
+  vector<char*> lastNames;
+  
+  fstream stream1;
+  fstream stream2;
+
+  //Get names from txt files and push into vector
+  stream1.open("firstNames.txt");
+  for(int i = 0; i<= 20; i++) {
+    char* temp1 = new char [15];
+    stream1.getline(temp1, 15);
+    firstNames.push_back(temp1);
+  }
+  stream1.close();
+
+  stream2.open("lastNames.txt");
+  for(int i = 0; i<= 20; i++) {
+    char* temp = new char [15];
+    stream2.getline(temp, 15);
+    lastNames.push_back(temp);
+  }
+  stream2.close();
 
   //copy in function commands
   bool running = true;;
@@ -35,7 +62,7 @@ int main() {
   char quitl[5];
 
   Node* head = NULL;
-  vector<Student*>* studentList;
+  vector<Student*>* studentList = new vector<Student*>();
   int size = 100;
   int newSize = 100;
 
@@ -43,8 +70,12 @@ int main() {
   for(int i = 0; i < 100; i++) {
     hash[i] = NULL;
   }
+
     
   while(running == true) {
+
+    int people = 200;
+    createRandom(studentList, firstNames, lastNames, people, size, newSize, hash);
     
     cout << endl;
     cout << "Enter add, print, or delete to alter the student list" << endl;
@@ -133,14 +164,18 @@ void add(Student* &student, vector<Student*>* &studentList, int size, int newsiz
   }
   //if not, allow for up to 3 collisions
   else if(hash[index]->getNext() == NULL) {
-    hash[index]->getNext()->setNext(inputNode);
+    hash[index]->setNext(inputNode);
   }
   else if(hash[index]->getNext()->getNext() == NULL) {
-    hash[index]->getNext()->getNext()->setNext(inputNode);
+    hash[index]->getNext()->setNext(inputNode);
   }
   //if collisions > 3, rehash
   else {
-    rehash(hash, newsize, size);
+    bool rehashing = true;
+    hash[index]->getNext()->getNext()->setNext(inputNode);
+    while(rehashing == true) {
+      rehash(hash, newsize, size, rehashing);
+    }
   }
 }
 
@@ -156,7 +191,8 @@ void print(vector<Student*>* studentList) {
   //print information
   vector<Student*>::iterator iter = studentList->begin();
   for(iter; iter < studentList->end(); iter++) {
-    cout << (*iter)->getFirstName() << " " <<  (*iter)->getLastName() << endl;
+    cout << "First: " << (*iter)->getFirstName() << endl;
+    cout << "Last: " << (*iter)->getLastName() << endl;
     cout << "ID: " << (*iter)->getID() << endl;
     cout << "GPA: " << fixed << setprecision(2) << (*iter)->getGPA() << endl;
     cout << endl;
@@ -182,8 +218,9 @@ void remove(vector<Student*>* studentList, int id) {
   cout << "student eviscerated" << endl;
 }
 
-void rehash(Node** &hash, int &size, int oldSize) {
-  
+void rehash(Node** &hash, int &size, int oldSize, bool &rehashing) {
+
+  rehashing = false;
   Node** tempHash = new Node*[oldSize];
   for (int i = 0; i < size; i++) {
     tempHash[i] = hash[i];
@@ -207,13 +244,13 @@ void rehash(Node** &hash, int &size, int oldSize) {
 	    Node* moveHash3 = tempHash[i]->getNext()->getNext();
 	     //Make sure nothing else is after node
 	     moveHash3->setNext(NULL);
-	     addHash(newHash, moveHash3, index3, size);
+	     addHash(newHash, moveHash3, index3, size, rehashing);
 	  }
 	  moveHash2->setNext(NULL);
-          addHash(newHash, moveHash2, index2, size);
+          addHash(newHash, moveHash2, index2, size, rehashing);
        }
        moveHash1->setNext(NULL);
-       addHash(newHash, moveHash1, index1, size);
+       addHash(newHash, moveHash1, index1, size, rehashing);
     }
     
   }
@@ -222,7 +259,7 @@ void rehash(Node** &hash, int &size, int oldSize) {
   hash = newHash;
 }
 
-void addHash(Node** &hash, Node* &node, int newIndex, int size) {
+void addHash(Node** &hash, Node* &node, int newIndex, int size, bool &rehashing) {
   if (hash[newIndex] == NULL) {
     hash[newIndex] = node;
   }
@@ -233,6 +270,39 @@ void addHash(Node** &hash, Node* &node, int newIndex, int size) {
     hash[newIndex]->getNext()->setNext(node);
   }
   else {
-    rehash(hash, size, size);
+    rehash(hash, size, size, rehashing);
   }
+}
+
+void createRandom(vector<Student*>* &studentList, vector<char*> first, vector<char*> last, int people, int size, int newSize, Node** &hash){
+  //set seed
+  srand(time(NULL));
+  int ID = 100000;
+  
+  //randomly generate a name and a gpa
+  for(int i = 0; i < people; i++){
+    //get random number from 1-20
+    int randomFirst = rand()%20;
+    int randomLast = rand()%20;
+
+    //calculate a gpa
+    float GPA = (float)(rand()%(100) + 1)/25;
+
+    //call add function and get
+    Student* inputStudent = new Student();
+
+    //char demo[] = "Vikram";
+    //strcpy(inputStudent->getFirstName(), demo);
+    
+    strcpy(inputStudent->getFirstName(), first.at(randomFirst));
+    strcpy(inputStudent->getLastName(), last.at(randomLast));
+    inputStudent->setID(ID);
+    inputStudent->setGPA(GPA);
+    
+    studentList->push_back(inputStudent);
+    add(inputStudent, studentList, size, newSize, hash);
+
+    ID++;
+  }
+  return;
 }
