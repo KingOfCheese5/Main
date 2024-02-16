@@ -1,5 +1,5 @@
 //Levi Lao
-//First save: 1/29/24
+//Final save: 2/15/24
 //Utilize previous linkedlist code, store students in a hash table using student data. Use chaining(linked list) to deal with collisions. If there are more
 //than 3 collisions in a code, create a table and double the size of the tablet, then rehash. Additionally, make function to create a random student using
 //students from a list of random names.
@@ -55,11 +55,13 @@ int main() {
   char printCopy[] = "print";
   char deleteCopy[] = "delete";
   char quitCopy[] = "quit";
-
+  char randomCopy[] = "random";
+  
   char addl[4];
   char printl[6];
   char deletel[7];
   char quitl[5];
+  char random1[7];
 
   Node* head = NULL;
   vector<Student*>* studentList = new vector<Student*>();
@@ -71,14 +73,12 @@ int main() {
     hash[i] = NULL;
   }
 
-    
+  //main
   while(running == true) {
-
-    int people = 200;
-    createRandom(studentList, firstNames, lastNames, people, size, newSize, hash);
     
     cout << endl;
     cout << "Enter add, print, or delete to alter the student list" << endl;
+    cout << "Or enter random to generate a list of random students" << endl;
     cout << "If not, enter quit to exit program" << endl;
 
     //copy over strings
@@ -87,6 +87,7 @@ int main() {
     strcpy(printl, printCopy);
     strcpy(deletel, deleteCopy);
     strcpy(quitl, quitCopy);
+    strcpy(random1, randomCopy);
 
     cin.get(input, 81);
     cin.ignore(81, '\n');
@@ -138,6 +139,15 @@ int main() {
       cin.get();
 
       remove(studentList, studentID);
+    }
+    //generate random students
+    else if(strcmp(input, random1) == 0) {
+      cout << "How many students would you like to generate?" << endl;
+      int people;
+      cin >> people;
+      cin.get();
+
+      createRandom(studentList, firstNames, lastNames, people, size, newSize, hash);
     }
 
     //exit program
@@ -215,33 +225,32 @@ void remove(vector<Student*>* studentList, int id) {
       studentList->erase(iter);
     }
   }
+  //student deleted
   cout << "student eviscerated" << endl;
 }
 
 void rehash(Node** &hash, int &size, int oldSize, bool &rehashing) {
 
+  //set bool to false then create new hashtable
   rehashing = false;
-  Node** tempHash = new Node*[oldSize];
-  for (int i = 0; i < size; i++) {
-    tempHash[i] = hash[i];
-  }
-
   size = size * 2;
   Node** newHash = new Node* [size];
+  //make every space null
   for(int x = 0; x < size; x++) {
     newHash[x] = NULL;
   }
 
-  for(int i = 0; i < size; i++) {
-    if(tempHash[i] != NULL) {
-      int index1 = (tempHash[i]->getStudent()->getID())%size;
-      Node* moveHash1 = tempHash[i];
-       if (tempHash[i]->getNext() != NULL) {
-	 int index2 = (tempHash[i]->getNext()->getStudent()->getID())%size;
-	  Node* moveHash2 = tempHash[i]->getNext();
-	  if(tempHash[i]->getNext()->getNext() != NULL) {
-	    int index3 = (tempHash[i]->getNext()->getNext()->getStudent()->getID())%size;
-	    Node* moveHash3 = tempHash[i]->getNext()->getNext();
+  //Rehash, placing each node into corresponding index on new table
+  for(int i = 0; i < size/2; i++) {
+    if(hash[i] != NULL) {
+      int index1 = (hash[i]->getStudent()->getID())%size;
+      Node* moveHash1 = hash[i];
+       if (hash[i]->getNext() != NULL) {
+	 int index2 = (hash[i]->getNext()->getStudent()->getID())%size;
+	  Node* moveHash2 = hash[i]->getNext();
+	  if(hash[i]->getNext()->getNext() != NULL) {
+	    int index3 = (hash[i]->getNext()->getNext()->getStudent()->getID())%size;
+	    Node* moveHash3 = hash[i]->getNext()->getNext();
 	     //Make sure nothing else is after node
 	     moveHash3->setNext(NULL);
 	     addHash(newHash, moveHash3, index3, size, rehashing);
@@ -259,7 +268,9 @@ void rehash(Node** &hash, int &size, int oldSize, bool &rehashing) {
   hash = newHash;
 }
 
+//function to actually add new indices to hash table
 void addHash(Node** &hash, Node* &node, int newIndex, int size, bool &rehashing) {
+  //pretty much the same code from add()
   if (hash[newIndex] == NULL) {
     hash[newIndex] = node;
   }
@@ -288,12 +299,9 @@ void createRandom(vector<Student*>* &studentList, vector<char*> first, vector<ch
     //calculate a gpa
     float GPA = (float)(rand()%(100) + 1)/25;
 
-    //call add function and get
+    //create the student and add it to the list
     Student* inputStudent = new Student();
 
-    //char demo[] = "Vikram";
-    //strcpy(inputStudent->getFirstName(), demo);
-    
     strcpy(inputStudent->getFirstName(), first.at(randomFirst));
     strcpy(inputStudent->getLastName(), last.at(randomLast));
     inputStudent->setID(ID);
