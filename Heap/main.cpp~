@@ -1,5 +1,7 @@
 #include <iostream>
 #include <cstring>
+#include <math.h> 
+#include <fstream> 
 
 using namespace std;
 
@@ -21,25 +23,24 @@ int main() {
   char printl[6];
   char deletel[7];
   char quitl[5];
-  char clear1[5];
+  char clearl[6];
+
+  //initialize array with 0s
+  int heapArray[101];
+  for (int i = 0; i < 100; i++) {
+    heapArray[i] = 0;
+  }
 
   while(running == true) {
-
-    // Initialize the array with zeros
-    int heapArray[101];
-    for (int i = 0; i < 100; i++) {
-      heapArray[i] = 0;
-    }
+    
     int inputTotal = 0;
     int index;
     int level;
 
     srand(time(NULL));
-
-    bool running = true;
     
     cout << endl;
-    cout << "Enter add, print, delete or clear to sort " << endl;
+    cout << "Enter add, print, delete or clear" << endl;
     cout << "To exit program, type quit" << endl;
 
     //copy over strings
@@ -48,7 +49,7 @@ int main() {
     strcpy(printl, printCopy);
     strcpy(deletel, deleteCopy);
     strcpy(quitl, quitCopy);
-    strcpy(random1, randomCopy);
+    strcpy(clearl, clearCopy);
 
     cin.get(input, 81);
     cin.ignore(81, '\n');
@@ -70,9 +71,13 @@ int main() {
       heapArray[inputTotal] = 0;
       inputTotal--;
       remove(heapArray, heapArray[1], 1, inputTotal);
-      cout << "Successfully deleted root of tree" << endl << endl;
+      cout << "Root deleted" << endl << endl;
     }
-
+    
+    else if(strcmp(input, clearl) == 0) {
+      cout << "Cleared" << endl;
+    }
+    
     //exit program
     else if(strcmp(input, quitl) == 0) {
       cout << "Exited" << endl;

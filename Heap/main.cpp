@@ -5,10 +5,11 @@
 
 using namespace std;
 
-void add(int (&heapArray)[101], int &inputTotal);
-void sortArray(int (&heapArray)[101], int value, int index);
+void add(int heapArray[], int &inputTotal);
+void sortArray(int heapArray[], int value, int index);
 void print(int (&heapArray)[101], int index, int level, int inputTotal);
 void remove(int (&heapArray)[101], int value, int index, int &inputTotal);
+void removeAll(int (&heapArray)[101], int &inputTotal);
 
 int main() {
 
@@ -31,12 +32,12 @@ int main() {
     heapArray[i] = 0;
   }
 
+  int inputTotal = 0;
+  int index;
+  int level;
+
   while(running == true) {
     
-    int inputTotal = 0;
-    int index;
-    int level;
-
     srand(time(NULL));
     
     cout << endl;
@@ -70,12 +71,12 @@ int main() {
       heapArray[1] = heapArray[inputTotal];
       heapArray[inputTotal] = 0;
       inputTotal--;
-      remove(heapArray, heapArray[1], 1, inputTotal);
+      //remove(heapArray, heapArray[1], 1, inputTotal);
       cout << "Root deleted" << endl << endl;
     }
     
     else if(strcmp(input, clearl) == 0) {
-      cout << "Cleared" << endl;
+      //removeAll(heapArray, inputTotal);
     }
     
     //exit program
@@ -89,72 +90,61 @@ int main() {
   return 0;
 }
 
-void add (int (&heapArray)[101], int &inputTotal) {
+void add (int heapArray[], int &inputTotal) {
   // Input through console
-  bool inputMethodLoop = true;
-  while (inputMethodLoop == true) {
+  bool running2 = true;
+  while (running2 == true) {
     cout << "CONSOLE or FILE? (uppercase)" << endl;
     char input[10];
     cin.get(input, 10);
     cin.get();
+    int inputNumbers;
+    
     if (strcmp(input, "CONSOLE") == 0) {
-      int inputNums;
-      bool sizeCheck = true;
-      while (sizeCheck == true) {
-	cout << "How many numbers are you adding?" << endl;
-	cin >> inputNums;
-	cin.get();
-	// Make sure the user doesn't exceed the maximum allowed numbers in the tree 
-	if (inputTotal + inputNums > 100) {
-	  cout << "There isn't enough space to add that many numbers!" << endl;
-	}
-	else {
-	  sizeCheck = false;
-	}
-      }
+      cout << "How many numbers are you adding?" << endl;
+      cin >> inputNumbers;
+      cin.get();
       // Add the inputted numbers into an array
-      for (int i = inputTotal; i < (inputTotal + inputNums); i++) {
+      for (int i = inputTotal; i < (inputTotal + inputNumbers); i++) {
 	cin >> heapArray[i+1];
 	cin.get();
 	sortArray(heapArray, heapArray[i+1], i+1);
       }
-      inputTotal+= inputNums;
-      inputMethodLoop = false;
-    }
-    // Input through File
-    else if (strcmp(input, "FILE") == 0) {
-      int inputNums;
-      bool sizeCheck = true;
-      while (sizeCheck == true) {
-	cout << "How many numbers are you adding?" << endl;
-	cin >> inputNums;
-	cin.get();
-	// Make sure the user doesn't exceed the maximum allowed numbers in the tree
-	if (inputTotal + inputNums > 100) {
-	  cout << "There isn't enough space to add that many numbers!" << endl;
-	}
-	else {
-	  sizeCheck = false;
+      inputTotal+= inputNumbers;
+      running2 = false;
+      for(int i = 0; i < 101; i++) {
+	if(heapArray[i] != 0) {
+	  cout << heapArray[i];
 	}
       }
+    }
+    
+    // Input through File
+    else if (strcmp(input, "FILE") == 0) {
+      cout << "How many numbers are you adding?" << endl;
+      cin >> inputNumbers;
+      cin.get();
+	
       // Add to array through file
       ifstream numbers("testNumbers.txt");
       int oneNumber;
-      for (int i = inputTotal; i < (inputTotal + inputNums); i++) {
+      for (int i = inputTotal; i < (inputTotal + inputNumbers); i++) {
 	numbers >> heapArray[i+1];
 	sortArray(heapArray, heapArray[i+1], i+1);
       }
-      inputTotal+= inputNums;
-      inputMethodLoop = false;
+      inputTotal+= inputNumbers;
+      running2 = false;
     }
     else {
       cout << "That is not one of the two options!" << endl << endl;
     }
   }
 }
-void sortArray(int (&heapArray)[101], int value, int index) {
+void sortArray(int heapArray[], int value, int index) {
   int parentIndex = floor(index/2);
+  
   // If the child is larger than its parent, swap
+
   if (value > heapArray[parentIndex] && parentIndex != 0) {
     int temp = heapArray[parentIndex];
     heapArray[parentIndex] = value;
@@ -166,20 +156,25 @@ void sortArray(int (&heapArray)[101], int value, int index) {
 
 void print(int (&heapArray)[101], int index, int level, int inputTotal) {
   if (inputTotal == 1) {
-    cout << "The tree is empty!" << endl << endl;
+    cout << "Empty Tree" << endl;
   }
-  // Go through the right side of tree, finding where the tree stops, and indenting appropriately
+  // Right side
   else if (inputTotal != 1) {
-    if ((index*2) + 1 < inputTotal) {
+    
+    if ((index*2) + 1 <= inputTotal) {
       print(heapArray, (index*2) + 1, level + 1, inputTotal);
     }
     // Indent values
     for (int i = 0; i < level; i++) {
       cout << '\t';
     }
-    cout << heapArray[index] << endl;
+
+    if(inputTotal != 0) {
+      cout << heapArray[index] << endl;
+    }
+    
     // Left side
-    if ((index*2) < inputTotal) {
+    if ((index*2) <= inputTotal) {
       print(heapArray, (index*2), level + 1,  inputTotal);
     }
   }
@@ -226,5 +221,16 @@ void remove(int (&heapArray)[101], int value, int index, int &inputTotal) {
       heapArray[index*2+1] = swapTemp;
       remove(heapArray, heapArray[index*2+1], index*2+1, inputTotal);
     }
+  }
+}
+
+void removeAll(int (&heapArray)[101], int &inputTotal) {
+  // Run through tree, removing every root, until the tree is empty
+  while (inputTotal != 0) {
+    cout << heapArray[1] << endl;
+    heapArray[1] = heapArray[inputTotal];
+    heapArray[inputTotal] = 0;
+    inputTotal--;
+    remove(heapArray, heapArray[1], 1, inputTotal);
   }
 }
