@@ -26,9 +26,7 @@ int main() {
       }
       else if(){
 	cout << "who" << endl;
-      }
-      
-      
+      }      
 
   return 0;
 }
