@@ -39,7 +39,10 @@ int main() {
     newNode = new Node(readInput[i]);
 
     //if it's character, push onto stack
-    if(isMath(readInput[i] == 0)) {
+    if(isMath(readInput[i]) == 0) {
+      push(newNode, stackHead);
+    }
+    else if (readInput[i] == '(') {
       push(newNode, stackHead);
     }
     //if it's right parenthesis, pop from stack and onto queue until stackHead is left parenthesis
@@ -86,26 +89,26 @@ int main() {
 
   
   while(running == true) {
-      cout << "Enter PREFIX, POSTFIX, INFIX, or QUIT" << endl;
-      cin.get(input, 81);
-      cin.ignore(81, '\n');
+    cout << endl;
+    cout << "Enter PREFIX, POSTFIX, INFIX, or QUIT" << endl;
+    cin.get(input, 81);
+    cin.ignore(81, '\n');
 
-      if(strcmp(input, "PREFIX") == 0){
-	prefix(treeHead);
+    if(strcmp(input, "PREFIX") == 0){
+      prefix(treeHead);
 
-      }
-      else if(strcmp(input, "POSTFIX") == 0){
-	postfix(treeHead);
+    }
+    else if(strcmp(input, "POSTFIX") == 0){
+      postfix(treeHead);
 
-      }
+    }
 
-      else if(strcmp(input, "INFIX") == 0){
-	infix(treeHead);
-      }
+    else if(strcmp(input, "INFIX") == 0){
+      infix(treeHead);
+    }
 
-      else if(strcmp(input, "QUIT") == 0){
-	running = false;
-
+    else if(strcmp(input, "QUIT") == 0){
+      running = false;
     }
     
   }
@@ -116,7 +119,7 @@ int main() {
 
 int isMath(char c) {
   //test if character is mathematical expression
-  if((c == '+') || (c == '-') || (c == '*') || (c == '/') || (c == '^') || (c == '(')) {
+  if((c == '+') || (c == '-') || (c == '*') || (c == '/') || (c == '^')) {
       return 0;
   }
 
@@ -127,7 +130,7 @@ int isMath(char c) {
 }
 
 void push(Node* newNode, Node* &stackHead){//Add new node to stack
-  stackHead = newNode->getNext();
+  newNode->setNext(stackHead);
   stackHead = newNode;
 }
 
