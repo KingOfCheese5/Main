@@ -1,0 +1,64 @@
+#include <iostream>
+#include <cstring>
+#include "Node.h"
+#include <vector>
+#include <fstream>
+using namespace std;
+
+int main() {
+
+  Node* root = NULL;
+
+  bool running = true;;
+  char addCopy[] = "add";
+  char printCopy[] = "print";
+  char deleteCopy[] = "delete";
+  char quitCopy[] = "quit";
+  char searchCopy[] = "search";
+
+  char addl[4];
+  char printl[6];
+  char deletel[7];
+  char quitl[5];
+  char search1[8];
+
+  cout << "Welcome to Binary Search Tree" << endl;
+  cout << "Enter add, print, delete, search or quit" << endl;
+  
+  while(running == true) {
+    
+    char input[81];
+    strcpy(addl, addCopy);
+    strcpy(printl, printCopy);
+    strcpy(deletel, deleteCopy);
+    strcpy(quitl, quitCopy);
+    strcpy(search1, searchCopy);
+
+    cin.get(input, 81);
+    cin.ignore(81, '\n');
+
+    if(strcmp(input, addl) == 0) {
+      cout << "input by 'console' or 'file' ?" << endl;
+      cin.get(input, 81);
+      cin.ignore(81, '\n');
+      cout << input << endl;
+    }
+    
+    if(strcmp(input, print1) == 0) {
+      cout << "printed" << endl;
+    }
+
+    if(strcmp(input, delete1) == 0) {
+      cout << "deleted" << endl;
+    }
+
+    if(strcmp(input, search1) == 0) {
+      cout << "searched" << endl;
+    }
+
+    if(strcmp(input, quit1) == 0) {
+      return 0;
+    }
+  }
+  
+}
