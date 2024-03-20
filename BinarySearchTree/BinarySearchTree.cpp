@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #include <cstring>
 #include "Node.h"
 #include <vector>
@@ -6,6 +7,9 @@
 using namespace std;
 
 void add(Node* root, Node* cur, Node* node);
+void print(Node* cur, int count);
+int search(Node* cur, int value);
+
 
 int main() {
 
@@ -66,15 +70,18 @@ int main() {
       //input by file
       else if(strcmp(input, "file") == 0) {
 	//just use hashtable code
-	vector<int> numbers;
+	/*vector<int> numbers;
+	fstream stream1;; 
 
 	stream1.open("numbers.txt");
 	for(int i = 0; i<= 20; i++) {
-	  int tempInt;
-	  stream1.getline(tempInt, 15);
+	  char temp;
+	  stream1.getline(temp, 15);
+	  int tempInt = stoi(temp);
 	  numbers.push_back(tempInt);
 	}
-	stream1.close();
+	stream1.close(); */
+	cout << "yuh" << endl;
       }
     }
     
@@ -125,3 +132,33 @@ void add(Node* root, Node* cur, Node* node) {
   }
 }
 
+void print(Node* cur, int count){
+    if(cur->getLeft() != NULL){
+        print(cur->getLeft(), count + 1);
+    }
+    for(int i = 0; i < count; i++){
+        cout << '\t';
+    }
+    cout << cur->getInformation() << endl;
+    if(cur->getRight() != NULL){
+        print(cur->getRight(), count + 1);
+    }
+
+}
+
+int search(Node* cur, int value){
+    if(value > cur->getInformation()){
+        if(cur->getRight() != NULL){
+            return search(cur->getRight(), value);
+        }
+    }
+    else if(value < cur->getInformation()){
+        if(cur->getLeft() != NULL){
+            return search(cur->getLeft(), value);
+        }
+    }
+    else if(value == cur->getInformation()){
+        return 1;
+    }
+    return 0;
+}
