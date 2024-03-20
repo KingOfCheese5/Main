@@ -6,10 +6,11 @@
 #include <fstream>
 using namespace std;
 
-void add(Node* root, Node* cur, Node* node);
+void add(Node* &root, Node* cur, Node* node);
 void print(Node* cur, int count);
 int search(Node* cur, int value);
-
+void remove(Node* &root, Node* cur, int value);
+int hasChild(Node* node);
 
 int main() {
 
@@ -86,15 +87,35 @@ int main() {
     }
     
     if(strcmp(input, printl) == 0) {
-      cout << "printed" << endl;
+      if(root != NULL) {
+	print(root, 0);
+      }
+      else {
+	cout << "There's nothing to print bozo" << endl;
+      }
     }
 
     if(strcmp(input, deletel) == 0) {
-      cout << "deleted" << endl;
+      cout << "what value do you want to remove?" << endl;
+      int removeMe;
+      cin >> removeMe;
+      cin.get();
+
+      remove(root, root, removeMe);
     }
 
     if(strcmp(input, searchl) == 0) {
-      cout << "searched" << endl;
+      cout << "what value do you want to search for?" << endl;
+      int searchFor;
+      cin >> searchFor;
+      cin.get();
+
+      if(search(root, searchFor) == 0) {
+	cout << "value found" << endl;
+      }
+      else if(search(root, searchFor) == 1) {
+	cout << "value not found" << endl;
+      }
     }
 
     if(strcmp(input, quitl) == 0) {
@@ -104,7 +125,7 @@ int main() {
   }
 }
 
-void add(Node* root, Node* cur, Node* node) {
+void add(Node* &root, Node* cur, Node* node) {
   cout << "54 from treball is odee shooting hangpulls" << endl;
 
   //start tree
@@ -115,6 +136,7 @@ void add(Node* root, Node* cur, Node* node) {
   else if(cur->getInformation() >= node->getInformation()){
     if(cur->getLeft() == NULL){
       cur->setLeft(node);
+      cout << "set left" << endl;
     }
     else{
       add(root, cur->getLeft(), node);
@@ -125,6 +147,7 @@ void add(Node* root, Node* cur, Node* node) {
   else if(cur->getInformation() < node->getInformation()){
     if(cur->getRight() == NULL){
       cur->setRight(node);
+      cout << "set right" << endl;
     }
     else{
       add(root, cur->getRight(), node);
@@ -132,18 +155,20 @@ void add(Node* root, Node* cur, Node* node) {
   }
 }
 
-void print(Node* cur, int count){
-    if(cur->getLeft() != NULL){
-        print(cur->getLeft(), count + 1);
-    }
-    for(int i = 0; i < count; i++){
-        cout << '\t';
-    }
-    cout << cur->getInformation() << endl;
-    if(cur->getRight() != NULL){
-        print(cur->getRight(), count + 1);
-    }
+void print(Node* cur, int count) {
+  
+  if(cur->getLeft() != NULL){
+    print(cur->getLeft(), count + 1);
+  }
+  
+  for(int i = 0; i < count; i++){
+    cout << '\t';
+  }
 
+  cout << cur->getInformation() << endl;
+  if(cur->getRight() != NULL) {
+    print(cur->getRight(), count + 1);
+  }
 }
 
 int search(Node* cur, int value){
@@ -158,7 +183,59 @@ int search(Node* cur, int value){
         }
     }
     else if(value == cur->getInformation()){
-        return 1;
+        return 0;
     }
+    return 1;
+}
+
+void remove(Node* &root, Node* cur, int value) {
+
+  //delete root and no subtrees
+  if(value == root->getInformation()) {
+    if((root->getLeft() == NULL) && (root->getRight() == NULL)) {
+      delete root;
+      root = NULL;
+      cout << "deleted" << endl;
+    }
+    //delete root and one sided
+    else if((root->getLeft() != NULL) && (root->getRight() == NULL)) {
+      Node* temp = root->getRight();
+      delete root->getRight();
+      root->~Node();
+      root = temp;
+    }
+    else if((root->getRight() != NULL) && (root->getLeft() == NULL)) {
+      Node* temp = root->getLeft();
+      delete root->getLeft();
+      root->~Node();
+      root = temp;
+    }
+    //
+    //    else if() {
+    //cout << "a" << endl;
+    //}
+  }
+  else if(value < cur->getInformation()) {
+    cout << "yah" << endl;
+
+  }
+  else if(value > cur->getInformation()) {
+    cout << "yuh" << endl;
+  }
+  
+}
+
+   
+int hasChild(Node* node) {
+
+  //if node has two children, return 0. If node has a child, return 1. If node has no children, return 2.
+  if((node->getLeft() != NULL) && (node->getRight() != NULL) ) {
     return 0;
+  }
+  else if((node->getLeft() != NULL) || (node->getRight() != NULL) ) {
+    return 1;
+  }
+  else {
+    return 2;
+  }
 }
