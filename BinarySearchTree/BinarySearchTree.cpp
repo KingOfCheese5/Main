@@ -82,13 +82,12 @@ int main() {
 
 	//just use hashtable code
 	vector<int> numbers;
-	fstream stream1;x
+	fstream stream1;
 	stream1.open("numbers.txt");
 	
 	int tempInt;
-	for(int i = 0; i< numNums; i++) {
+	while(stream1 >> tempInt) {
 	  numbers.push_back(tempInt);
-	  cout << numbers[i] << endl;
 	}
 
 	vector <int> ::iterator iter = numbers.begin();
@@ -149,7 +148,6 @@ int main() {
 }
 
 void add(Node* &root, Node* cur, Node* node) {
-  cout << "54 from treball is odee shooting hangpulls" << endl;
 
   //start tree
   if(root == NULL){
@@ -159,7 +157,6 @@ void add(Node* &root, Node* cur, Node* node) {
   else if(cur->getInformation() >= node->getInformation()){
     if(cur->getLeft() == NULL){
       cur->setLeft(node);
-      cout << "set left" << endl;
     }
     else{
       add(root, cur->getLeft(), node);
@@ -170,7 +167,6 @@ void add(Node* &root, Node* cur, Node* node) {
   else if(cur->getInformation() < node->getInformation()){
     if(cur->getRight() == NULL){
       cur->setRight(node);
-      cout << "set right" << endl;
     }
     else{
       add(root, cur->getRight(), node);
