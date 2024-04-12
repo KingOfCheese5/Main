@@ -4,57 +4,63 @@
 
 using namespace std;
 
-//constructor
-Node:: Node(){
-  next = NULL;
-  right = NULL;
+#include <iostream>
+#include "node.h"
+
+using namespace std;
+
+Node::Node() { //Constructor
   left = NULL;
-  color = 0;
+  right = NULL;
+  parent = NULL;
+  data = 0;
+  color = 1; //black = 0, red = 1
 }
 
-//destructor
-Node :: ~Node(){
-  next = NULL;
+Node::~Node() { //Destructor
+  left = NULL;
+  right = NULL;
+  parent = NULL;
 }
 
-//sets the current node's right node.
-void Node :: setRight(Node* newRight){
-  right = newRight;
-
-}
-//sets the current node's left node.
-void Node :: setLeft(Node* newLeft){
+//Setters
+void Node::setLeft(Node* newLeft) {
   left = newLeft;
-
 }
 
-//sets the current node's next.
-void Node :: setNext(Node* newnext){
-  next = newnext;
+void Node::setRight(Node* newRight) {
+  right = newRight;
 }
 
-//returns the current node's next
-Node* Node:: getNext(){
-  return next;
+void Node::setParent(Node* newParent) {
+  parent = newParent;
 }
 
-//returns the current node's right node.
-Node* Node :: getRight(){
-  return right;
+void Node::setData(int newData) {
+  data = newData;
 }
 
-//returns the current node's left node.
-Node* Node :: getLeft(){
+void Node::setColor(int newColor) {
+  color = newColor;
+}
+
+//Getters
+Node* Node::getLeft() {
   return left;
 }
 
-//sets the char stored by the node.
-void Node :: setInformation(int value){
-  data = value;
+Node* Node::getRight() {
+  return right;
 }
 
-//returns the char stored by the node.
-int Node :: getInformation(){
-  return data;
+Node* Node::getParent() {
+  return parent;
+}
 
+int Node::getData() {
+  return data;
+}
+
+int Node::getColor() {
+  return color;
 }
