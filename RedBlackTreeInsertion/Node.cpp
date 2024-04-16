@@ -15,8 +15,7 @@ Node::Node() { //Constructor
   parent = NULL;
   data = 0;
   color = 1; //black = 0, red = 1
-}
-
+  
 Node::~Node() { //Destructor
   left = NULL;
   right = NULL;

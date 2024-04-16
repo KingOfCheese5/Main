@@ -9,6 +9,7 @@ using namespace std;
 
 void add(Node* &root, Node* cur, Node* node, int data);
 void print(Node* cur, int count);
+void balance(Node* &root, Node* cur);
 
 int main() {
 
@@ -75,6 +76,7 @@ int main() {
       for(iter = numbers.begin(); iter < numbers.end(); iter++){
 	Node* node = new Node();
         node->setInformation(*iter);
+	node->setColor(1);
 	add(root, root, node);
       }
 	stream1.close();
@@ -103,7 +105,7 @@ int main() {
 }
 
 void add(Node* &root, Node* cur, Node* node, int data) {
-
+  
   //start tree
   if(root == NULL){
     root = node;
@@ -114,6 +116,7 @@ void add(Node* &root, Node* cur, Node* node, int data) {
   else if(cur->getInformation() >= node->getInformation()){
     if(cur->getLeft() == NULL){
       cur->setLeft(node);
+      balance(root, cur);
     }
     else{
       add(root, cur->getLeft(), node);
@@ -124,6 +127,7 @@ void add(Node* &root, Node* cur, Node* node, int data) {
   else if(cur->getInformation() < node->getInformation()){
     if(cur->getRight() == NULL){
       cur->setRight(node);
+      balance(root, cur);
     }
     else{
       add(root, cur->getRight(), node);
@@ -150,3 +154,16 @@ void print(Node* cur, int count) {
   }
 }
 
+void balance(Node* &root, Node* cur, Node* node) {
+  Node* parent = NULL;
+  Node* grandparent = NULL;
+
+  while((current != root) && (current->getColor() != 0) && 
+  //case one: new tree, root is added
+  if(root == node) {
+    root->setColor(0);
+  }
+  //case two: parent is black
+  else if(node->)
+
+}
