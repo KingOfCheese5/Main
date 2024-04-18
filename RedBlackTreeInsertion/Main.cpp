@@ -154,16 +154,66 @@ void print(Node* cur, int count) {
   }
 }
 
-void balance(Node* &root, Node* cur, Node* node) {
+void balance(Node* &root, Node* cur) {
   Node* parent = NULL;
   Node* grandparent = NULL;
-
-  while((current != root) && (current->getColor() != 0) && 
-  //case one: new tree, root is added
-  if(root == node) {
-    root->setColor(0);
+  while((cur != root) && (cur->getColor() != 0) && ((cur->getParent())->getColor() == 1)) {
+      parent = cur->getParent();
+      grandparent = parent->getParent();
+      //case one: new tree, root is added
+      if(root == cur) {
+	root->setColor(0);
+      }
+      //case two: parent is black
+      else if(parent->getColor() == 0) {
+	return 0;
+      }
   }
-  //case two: parent is black
-  else if(node->)
-
 }
+
+void leftRotate(Node* &root, Node* cur) {
+   Node* rightP = cur->getRight();
+   //start rotation
+   cur->setRight(rightP->getLeft());
+   if (cur->getRight() != NULL) {
+     cur->getRight()->setParent(cur);
+   }
+   rightP->setParent(cur->getParent());
+   //if working with root
+   if (cur->getParent() == NULL) {
+     root = rightP;
+   }
+   else if (cur == (cur->getParent())->getLeft()) {
+     cur->getParent()->setLeft(rightP);
+   }
+   else {
+      cur->getParent()->setRight(rightP);
+   }
+   rightP->setLeft(cur);
+   cur->setParent(rightP);
+}
+
+void rightRotate(Node* &root, Node* cur) {
+  Node* leftP = cur->getLeft();
+  //start rotation
+  cur->setLeft(leftP->getRight());
+  if (cur->getLeft() != NULL) {
+    cur->getLeft()->setParent(cur);
+  }
+  leftP->setParent(cur->getParent());
+  //root
+  if(cur->getParent() == NULL) {
+    root = leftP;
+  }
+  else if(cur = cur->getParent()->getRight()){
+    cur->getParent()->setRight(leftP);
+  }
+  else {
+    cur->getParent()->setLeft(leftP);
+  }
+  leftP->setRight(cur);
+  cur->setParent(leftP);
+}
+
+    
+    
