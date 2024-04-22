@@ -25,6 +25,7 @@ private:
   Node* left;
   Node* right;
   Node* parent;
+  Node* uncle;
   int data;
   int color; // 0 = black, 1 = red
 };

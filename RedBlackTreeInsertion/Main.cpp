@@ -157,18 +157,25 @@ void print(Node* cur, int count) {
 void balance(Node* &root, Node* cur) {
   Node* parent = NULL;
   Node* grandparent = NULL;
-  while((cur != root) && (cur->getColor() != 0) && ((cur->getParent())->getColor() == 1)) {
-      parent = cur->getParent();
-      grandparent = parent->getParent();
-      //case one: new tree, root is added
-      if(root == cur) {
-	root->setColor(0);
+  parent = cur->getParent();
+  grandparent = parent->getParent();
+  //case one: new tree, root is added
+  if(root == cur) {
+    root->setColor(0);
+    //case two: parent is black
+    if(cur->getParent() !- NULL) {
+      if(cur->getParent()->getColor() == 0) {
+	return;
       }
-      //case two: parent is black
-      else if(parent->getColor() == 0) {
-	return 0;
+      //case 3: parent and uncle are red
+      if(cur->getGrandparent() != NULL) {
+	if((cur->getParent()->getColor() == 1) && (cur->getParent()->getUncle() != NULL) && (cur->getParent()->getUncle()->getColor() == 1)) {
+	  cur->getParent()->setColor(0);
+	  cur->getUncle()->setColor(0);
+	  cur->getGrandparent()->setColor(1);
+	  balance(root, cur);
+	}
       }
-  }
 }
 
 void leftRotate(Node* &root, Node* cur) {

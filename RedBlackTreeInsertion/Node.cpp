@@ -15,7 +15,8 @@ Node::Node() { //Constructor
   parent = NULL;
   data = 0;
   color = 1; //black = 0, red = 1
-  
+}
+
 Node::~Node() { //Destructor
   left = NULL;
   right = NULL;
@@ -56,6 +57,18 @@ Node* Node::getParent() {
   return parent;
 }
 
+//vikram vasudevan
+Node* Node::getUncle(){
+  Node* uncle = new Node();
+  if(this->getParent()->getInformation() <= this->getInformation()){
+    uncle = this->getParent()->getLeft();
+  }
+  else if(this->getParent()->getInformation() > this->getInformation()){
+    uncle = this->getParent()->getRight();
+  }
+  return uncle;
+}
+ 
 int Node::getData() {
   return data;
 }
