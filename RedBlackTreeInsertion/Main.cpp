@@ -175,15 +175,57 @@ void balance(Node* &root, Node* cur) {
 	  cur->getGrandparent()->setColor(1);
 	  balance(root, cur);
 	}
+	//case 4: left parent, right node
+	if (newNode->getParent()->getParent()->getLeft() == newNode->getParent() && newNode->getParent()->getRight() == newNode) {
+	  // Change parents and children
+	  Node* tempParent = newNode->getParent();
+	  Node* tempLeft = newNode->getLeft();
+	  newNode->getParent()->getParent()->setLeft(newNode);
+	  newNode->setParent(newNode->getParent()->getParent());
+	  newNode->setLeft(tempParent);
+	  newNode->getLeft()->setParent(newNode);
+	  // Set right node if it exists
+	  if (tempLeft != NULL) {
+	    tempParent->setRight(tempLeft);
+	    tempParent->getRight()->setParent(newNode->getLeft());
+	  }
+	  else {
+	    tempParent->setRight(NULL);
+	  }
+	  newNode = newNode->getLeft();
+
+	}
+	//Parent is right and node is left
+	else if (newNode->getParent()->getParent()->getRight() == newNode->getParent() && newNode->getParent()->getLeft() == newNode) {
+	  // Change parents and children
+	  Node* tempParent = newNode->getParent();
+	  Node* tempRight = newNode->getRight();
+	  newNode->getParent()->getParent()->setRight(newNode);
+	  newNode->setParent(newNode->getParent()->getParent());
+	  newNode->setRight(tempParent);
+	  newNode->getRight()->setParent(newNode);
+	  // Set left node if it exists
+	  if (tempRight != NULL) {
+	    tempParent->setLeft(tempRight);
+	    tempParent->getLeft()->setParent(newNode->getRight());
+	  }
+	  else {
+	    tempParent->setLeft(NULL);
+	  }
+	}
+	newNode = newNode->getRight();
+	case5(treeRoot, newNode);
       }
+    }
+  }
 }
 
 void leftRotate(Node* &root, Node* cur) {
    Node* rightP = cur->getRight();
    //start rotation
    cur->setRight(rightP->getLeft());
-   if (cur->getRight() != NULL) {
-     cur->getRight()->setParent(cur);
+   if (cur->getLeft() != NULL) {
+     cur->getLeft()->setParent(cur);
    }
    rightP->setParent(cur->getParent());
    //if working with root
@@ -193,7 +235,7 @@ void leftRotate(Node* &root, Node* cur) {
    else if (cur == (cur->getParent())->getLeft()) {
      cur->getParent()->setLeft(rightP);
    }
-   else {
+  else {
       cur->getParent()->setRight(rightP);
    }
    rightP->setLeft(cur);
