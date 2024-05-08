@@ -177,91 +177,66 @@ void balance(Node* &root, Node* cur) {
 	}
 	//case 4: left parent, right node
 	if (newNode->getParent()->getParent()->getLeft() == newNode->getParent() && newNode->getParent()->getRight() == newNode) {
-	  // Change parents and children
-	  Node* tempParent = newNode->getParent();
-	  Node* tempLeft = newNode->getLeft();
-	  newNode->getParent()->getParent()->setLeft(newNode);
-	  newNode->setParent(newNode->getParent()->getParent());
-	  newNode->setLeft(tempParent);
-	  newNode->getLeft()->setParent(newNode);
-	  // Set right node if it exists
-	  if (tempLeft != NULL) {
-	    tempParent->setRight(tempLeft);
-	    tempParent->getRight()->setParent(newNode->getLeft());
-	  }
-	  else {
-	    tempParent->setRight(NULL);
-	  }
-	  newNode = newNode->getLeft();
-
+	  leftRotate(root, cur);
 	}
 	//Parent is right and node is left
 	else if (newNode->getParent()->getParent()->getRight() == newNode->getParent() && newNode->getParent()->getLeft() == newNode) {
-	  // Change parents and children
-	  Node* tempParent = newNode->getParent();
-	  Node* tempRight = newNode->getRight();
-	  newNode->getParent()->getParent()->setRight(newNode);
-	  newNode->setParent(newNode->getParent()->getParent());
-	  newNode->setRight(tempParent);
-	  newNode->getRight()->setParent(newNode);
-	  // Set left node if it exists
-	  if (tempRight != NULL) {
-	    tempParent->setLeft(tempRight);
-	    tempParent->getLeft()->setParent(newNode->getRight());
-	  }
-	  else {
-	    tempParent->setLeft(NULL);
-	  }
+	  rightRotate(root, cur);
 	}
-	newNode = newNode->getRight();
-	case5(treeRoot, newNode);
+	//case 5: run after case 4, uncle black, parent & cur on one side
+	if(current->getParent()->getInformation() < current->getParent()->getParent()->getInformation() && current->getInformation() < current->getParent()->getInformation()) {
+	  int swapRoot;
+	}
+	else if(current->getParent()->getInformation() >= current->getParent()->getParent()->getInformation() && current->getInformation() >= current->getParent()->getInformation()) {
+
+	}
       }
     }
   }
 }
 
 void leftRotate(Node* &root, Node* cur) {
-   Node* rightP = cur->getRight();
+   Node* rightN = cur->getRight();
    //start rotation
-   cur->setRight(rightP->getLeft());
+   cur->setRight(rightN->getLeft());
    if (cur->getLeft() != NULL) {
      cur->getLeft()->setParent(cur);
    }
-   rightP->setParent(cur->getParent());
+   rightN->setParent(cur->getParent());
    //if working with root
    if (cur->getParent() == NULL) {
-     root = rightP;
+     root = rightN;
    }
    else if (cur == (cur->getParent())->getLeft()) {
-     cur->getParent()->setLeft(rightP);
+     cur->getParent()->setLeft(rightN);
    }
   else {
-      cur->getParent()->setRight(rightP);
+      cur->getParent()->setRight(rightN);
    }
    rightP->setLeft(cur);
-   cur->setParent(rightP);
+   cur->setParent(rightN);
 }
 
 void rightRotate(Node* &root, Node* cur) {
-  Node* leftP = cur->getLeft();
+  Node* leftN = cur->getLeft();
   //start rotation
-  cur->setLeft(leftP->getRight());
+  cur->setLeft(leftN->getRight());
   if (cur->getLeft() != NULL) {
     cur->getLeft()->setParent(cur);
   }
-  leftP->setParent(cur->getParent());
+  leftN->setParent(cur->getParent());
   //root
   if(cur->getParent() == NULL) {
-    root = leftP;
+    root = leftN;
   }
   else if(cur = cur->getParent()->getRight()){
-    cur->getParent()->setRight(leftP);
+    cur->getParent()->setRight(leftN);
   }
   else {
-    cur->getParent()->setLeft(leftP);
+    cur->getParent()->setLeft(leftN);
   }
   leftP->setRight(cur);
-  cur->setParent(leftP);
+  cur->setParent(leftN);
 }
 
     
