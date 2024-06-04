@@ -13,6 +13,7 @@ public:
   Node* getLeft();
   Node* getRight();
   Node* getParent();
+  Node* getUncle();
   int getData();
   int getColor();
   //Setters

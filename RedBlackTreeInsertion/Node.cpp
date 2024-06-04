@@ -60,15 +60,15 @@ Node* Node::getParent() {
 //vikram vasudevan
 Node* Node::getUncle(){
   Node* uncle = new Node();
-  if(this->getParent()->getInformation() <= this->getInformation()){
+  if(this->getParent()->getData() <= this->getData()){
     uncle = this->getParent()->getLeft();
   }
-  else if(this->getParent()->getInformation() > this->getInformation()){
+  else if(this->getParent()->getData() > this->getData()){
     uncle = this->getParent()->getRight();
   }
   return uncle;
 }
- 
+
 int Node::getData() {
   return data;
 }

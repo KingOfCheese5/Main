@@ -10,6 +10,8 @@ using namespace std;
 void add(Node* &root, Node* cur, Node* node, int data);
 void print(Node* cur, int count);
 void balance(Node* &root, Node* cur);
+void leftRotate(Node* &root, Node* cur);
+void rightRotate(Node* &root, Node* cur);
 
 int main() {
 
@@ -51,12 +53,12 @@ int main() {
 	cin >> temp;
 	cin.get();
 	Node* node = new Node();
-	node->setInformation(temp);
+	node->setData(temp);
 	add(root, root, node, temp);
       }
     }
     //input by file
-    else if(strcmp(choice, "file") == 0) {
+    else if(strcmp(input, "file") == 0) {
       cout << "How many numbers? " << endl;
       int numNums;
       cin >> numNums;
@@ -75,14 +77,15 @@ int main() {
       vector <int> ::iterator iter = numbers.begin();
       for(iter = numbers.begin(); iter < numbers.end(); iter++){
 	Node* node = new Node();
-        node->setInformation(*iter);
+        node->setData(*iter);
 	node->setColor(1);
-	add(root, root, node);
+	add(root, root, node, *iter);
       }
 	stream1.close();
 	cout << "finished" << endl;
     }
-  }
+  
+
     
     //print function
     if(strcmp(input, printl) == 0) {
@@ -99,10 +102,11 @@ int main() {
       cout << "Program exited" << endl;
       running = false;
     }
+    
   }
-  
   return 0;
 }
+  
 
 void add(Node* &root, Node* cur, Node* node, int data) {
   
@@ -113,24 +117,24 @@ void add(Node* &root, Node* cur, Node* node, int data) {
     root->setData(data);
   }
   //make left subtree
-  else if(cur->getInformation() >= node->getInformation()){
+  else if(cur->getData() >= node->getData()){
     if(cur->getLeft() == NULL){
       cur->setLeft(node);
       balance(root, cur);
     }
     else{
-      add(root, cur->getLeft(), node);
+      add(root, cur->getLeft(), node, data);
     }
   }
 
   //make right subtree
-  else if(cur->getInformation() < node->getInformation()){
+  else if(cur->getData() < node->getData()){
     if(cur->getRight() == NULL){
       cur->setRight(node);
       balance(root, cur);
     }
     else{
-      add(root, cur->getRight(), node);
+      add(root, cur->getRight(), node, data);
     }
   }
 }
@@ -148,7 +152,7 @@ void print(Node* cur, int count) {
   }
 
   //print out right child last
-  cout << cur->getInformation() << endl;
+  cout << cur->getData() << endl;
   if(cur->getRight() != NULL) {
     print(cur->getRight(), count + 1);
   }
@@ -163,32 +167,50 @@ void balance(Node* &root, Node* cur) {
   if(root == cur) {
     root->setColor(0);
     //case two: parent is black
-    if(cur->getParent() !- NULL) {
+    if(cur->getParent() != NULL) {
       if(cur->getParent()->getColor() == 0) {
 	return;
       }
       //case 3: parent and uncle are red
-      if(cur->getGrandparent() != NULL) {
+      if(grandparent != NULL) {
 	if((cur->getParent()->getColor() == 1) && (cur->getParent()->getUncle() != NULL) && (cur->getParent()->getUncle()->getColor() == 1)) {
 	  cur->getParent()->setColor(0);
 	  cur->getUncle()->setColor(0);
-	  cur->getGrandparent()->setColor(1);
+	  grandparent->setColor(1);
 	  balance(root, cur);
 	}
 	//case 4: left parent, right node
-	if (newNode->getParent()->getParent()->getLeft() == newNode->getParent() && newNode->getParent()->getRight() == newNode) {
+	if (cur->getParent()->getParent()->getLeft() == cur->getParent() && cur->getParent()->getRight() == cur) {
 	  leftRotate(root, cur);
 	}
 	//Parent is right and node is left
-	else if (newNode->getParent()->getParent()->getRight() == newNode->getParent() && newNode->getParent()->getLeft() == newNode) {
+	else if (cur->getParent()->getParent()->getRight() == cur->getParent() && cur->getParent()->getLeft() == cur) {
 	  rightRotate(root, cur);
 	}
 	//case 5: run after case 4, uncle black, parent & cur on one side
-	if(current->getParent()->getInformation() < current->getParent()->getParent()->getInformation() && current->getInformation() < current->getParent()->getInformation()) {
-	  int swapRoot;
+	if(cur->getParent()->getData() < cur->getParent()->getParent()->getData() && cur->getData() < cur->getParent()->getData()) {
+	  if(cur->getParent()->getData() > cur->getData()){
+	    rightRotate(root, parent);
+	    cur->getParent()->setColor(0);
+	    grandparent->setColor(1);
+	  }
+	  else {
+	    leftRotate(root, parent);
+            cur->getParent()->setColor(0);
+            grandparent->setColor(1);
+	  }
 	}
-	else if(current->getParent()->getInformation() >= current->getParent()->getParent()->getInformation() && current->getInformation() >= current->getParent()->getInformation()) {
-
+	else if(cur->getParent()->getData() >= cur->getParent()->getParent()->getData() && cur->getData() >= cur->getParent()->getData()) {
+	  if(cur->getParent()->getData() > cur->getData()){
+            rightRotate(root, parent);
+            cur->getParent()->setColor(0);
+            grandparent->setColor(1);
+          }
+          else {
+            leftRotate(root, parent);
+            cur->getParent()->setColor(0);
+            grandparent->setColor(1);
+          }
 	}
       }
     }
@@ -213,7 +235,7 @@ void leftRotate(Node* &root, Node* cur) {
   else {
       cur->getParent()->setRight(rightN);
    }
-   rightP->setLeft(cur);
+   rightN->setLeft(cur);
    cur->setParent(rightN);
 }
 
@@ -235,7 +257,7 @@ void rightRotate(Node* &root, Node* cur) {
   else {
     cur->getParent()->setLeft(leftN);
   }
-  leftP->setRight(cur);
+  leftN->setRight(cur);
   cur->setParent(leftN);
 }
 
