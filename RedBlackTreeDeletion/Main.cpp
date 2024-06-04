@@ -13,6 +13,7 @@ void balance(Node* &root, Node* cur);
 void leftRotate(Node* &root, Node* cur);
 void rightRotate(Node* &root, Node* cur);
 void remove(Node* &root, Node* cur, int data);
+void doubleBlack(Node* &root, Node* cur);
 
 int main() {
 
@@ -23,7 +24,7 @@ int main() {
   bool running = true;;
   char addCopy[] = "add";
   char printCopy[] = "print";
-  char removeCopy[] = "remove"
+  char removeCopy[] = "remove";
   char quitCopy[] = "quit";
   
   char addl[4];
@@ -250,7 +251,7 @@ void remove(Node* &root, Node* cur, int data) {
       //make sure no children
       if (cur->getLeft() == NULL && cur->getRight() == NULL) {
 	//call double black function
-	if (current->getColor() == 0) {
+	if (cur->getColor() == 0) {
 	  doubleBlack(root, cur);
 	}
 	//balance parents
@@ -271,7 +272,7 @@ void remove(Node* &root, Node* cur, int data) {
 	while (replace->getLeft() != NULL) {
 	  replace = replace->getLeft();
 	}
-	cur->setNum(replace->getData());
+	cur->setData(replace->getData());
 	remove(root, replace, replace->getData()); 
       }
       // One child
@@ -279,11 +280,11 @@ void remove(Node* &root, Node* cur, int data) {
 	// Deleted node is red
 	if (cur->getColor() == 1) {
 	  if (cur->getLeft() != NULL) {
-	    cur->setNum(cur->getLeft()->getData());
+	    cur->setData(cur->getLeft()->getData());
 	    cur->setLeft(NULL);
 	  }
 	  else {
-	    cur->setNum(cur->getRight()->getData());
+	    cur->setData(cur->getRight()->getData());
 	    cur->setRight(NULL);
 	  }
 	  cur->setColor(0);
@@ -291,11 +292,11 @@ void remove(Node* &root, Node* cur, int data) {
 	// Child is red
 	else if ((cur->getLeft() != NULL && cur->getLeft()->getColor() == 1) || (cur->getRight() != NULL && cur->getRight()->getColor() == 1)) {
 	  if (cur->getLeft() != NULL) {
-            cur->setNum(cur->getLeft()->getData());
+            cur->setData(cur->getLeft()->getData());
             cur->setLeft(NULL);
           }
           else {
-            cur->setNum(cur->getRight()->getData());
+            cur->setData(cur->getRight()->getData());
             cur->setRight(NULL);
           }
 
@@ -303,11 +304,11 @@ void remove(Node* &root, Node* cur, int data) {
 	// Double black
 	else {
 	  if (cur->getLeft() != NULL) {
-            cur->setNum(cur->getLeft()->getData());
+            cur->setData(cur->getLeft()->getData());
             cur->setLeft(NULL);
           }
           else {
-            cur->setNum(cur->getRight()->getData());
+            cur->setData(cur->getRight()->getData());
             cur->setRight(NULL);
           }
 
@@ -386,7 +387,7 @@ void doubleBlack(Node* &root, Node* cur) {
         doubleBlack(root, cur);
     } else { //black sibling
         //case 3: black parent, sibling, and children
-      if (parent->getColor() == 0 && sibling != NULL && sibling->getColor() == 0) && (sibling->getLeft() == NULL || sibling->getLeft()->getColor() == 0) && (sibling->getRight() == NULL || sibling->getRight()->getColor() == 0) {
+      if (parent->getColor() == 0 && sibling != NULL && (sibling->getColor() == 0) && (sibling->getLeft() == NULL || sibling->getLeft()->getColor() == 0) && (sibling->getRight() == NULL || sibling->getRight()->getColor() == 0)) {
       sibling->setColor(1);
       doubleBlack(root, parent);
 	}
@@ -398,18 +399,18 @@ void doubleBlack(Node* &root, Node* cur) {
       }
         // Case 5 & 6: Sibling's inner child is red
         else if (sibling != NULL) {
-            if ((cur == parent->getLeft() && sibling->getRight() != nullptr && sibling->getRight()->getColor() == 'R') ||
-                (cur == parent->getRight() && sibling->getLeft() != nullptr && sibling->getLeft()->getColor() == 'R')) {
+            if ((cur == parent->getLeft() && sibling->getRight() != NULL && sibling->getRight()->getColor() == 1) ||
+                (cur == parent->getRight() && sibling->getLeft() != NULL && sibling->getLeft()->getColor() == 1)) {
                 if (cur == parent->getLeft()) {
-                    rightRotation(root, sibling);
+                    rightRotate(root, sibling);
                 } else {
-                    leftRotation(root, sibling);
+                    leftRotate(root, sibling);
                 }
-                sibling->setColor('R');
+                sibling->setColor(1);
                 if (cur == parent->getLeft()) {
-                    sibling->getRight()->setColor('B');
+                    sibling->getRight()->setColor(0);
                 } else {
-                    sibling->getLeft()->setColor('B');
+                    sibling->getLeft()->setColor(0);
                 }
                 // Continue handling the double black
                 doubleBlack(root, cur);
@@ -422,16 +423,16 @@ void doubleBlack(Node* &root, Node* cur) {
                     sibling->getLeft()->setColor(sibling->getColor());
                 }
                 sibling->setColor(parent->getColor());
-                parent->setColor('B');
+                parent->setColor(0);
                 if (cur == parent->getLeft()) {
-                    leftRotation(root, parent);
+                    leftRotate(root, parent);
                 } else {
-                    rightRotation(root, parent);
+                    rightRotate(root, parent);
                 }
                 if (cur == parent->getLeft()) {
-                    sibling->getRight()->setColor('B');
+                    sibling->getRight()->setColor(0);
                 } else {
-                    sibling->getLeft()->setColor('B');
+                    sibling->getLeft()->setColor(0);
                 }
             }
         }
