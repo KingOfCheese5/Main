@@ -1,3 +1,7 @@
+//Levi Lao
+//Date: 6/3/24
+//RBT Insertion: Self balancing red black tree using binary search tree
+
 #include <iostream>
 #include <string>
 #include <cstring>
@@ -117,10 +121,11 @@ void add(Node* &root, Node* cur, Node* node, int data) {
     root->setData(data);
   }
   //make left subtree
-  else if(cur->getData() >= node->getData()){
+  else if(data < cur->getData()){
     if(cur->getLeft() == NULL){
       cur->setLeft(node);
-      balance(root, cur);
+      node->setParent(cur);
+      balance(root, node);
     }
     else{
       add(root, cur->getLeft(), node, data);
@@ -128,10 +133,11 @@ void add(Node* &root, Node* cur, Node* node, int data) {
   }
 
   //make right subtree
-  else if(cur->getData() < node->getData()){
+  else if(data >= cur->getData()){
     if(cur->getRight() == NULL){
       cur->setRight(node);
-      balance(root, cur);
+      node->setParent(cur);
+      balance(root, node);
     }
     else{
       add(root, cur->getRight(), node, data);
@@ -158,64 +164,66 @@ void print(Node* cur, int count) {
   }
 }
 
-void balance(Node* &root, Node* cur) {
-  Node* parent = NULL;
-  Node* grandparent = NULL;
-  parent = cur->getParent();
-  grandparent = parent->getParent();
-  //case one: new tree, root is added
-  if(root == cur) {
-    root->setColor(0);
-    //case two: parent is black
-    if(cur->getParent() != NULL) {
-      if(cur->getParent()->getColor() == 0) {
-	return;
-      }
-      //case 3: parent and uncle are red
-      if(grandparent != NULL) {
-	if((cur->getParent()->getColor() == 1) && (cur->getParent()->getUncle() != NULL) && (cur->getParent()->getUncle()->getColor() == 1)) {
-	  cur->getParent()->setColor(0);
-	  cur->getUncle()->setColor(0);
-	  grandparent->setColor(1);
-	  balance(root, cur);
-	}
-	//case 4: left parent, right node
-	if (cur->getParent()->getParent()->getLeft() == cur->getParent() && cur->getParent()->getRight() == cur) {
-	  leftRotate(root, cur);
-	}
-	//Parent is right and node is left
-	else if (cur->getParent()->getParent()->getRight() == cur->getParent() && cur->getParent()->getLeft() == cur) {
-	  rightRotate(root, cur);
-	}
-	//case 5: run after case 4, uncle black, parent & cur on one side
-	if(cur->getParent()->getData() < cur->getParent()->getParent()->getData() && cur->getData() < cur->getParent()->getData()) {
-	  if(cur->getParent()->getData() > cur->getData()){
-	    rightRotate(root, parent);
-	    cur->getParent()->setColor(0);
-	    grandparent->setColor(1);
-	  }
-	  else {
-	    leftRotate(root, parent);
-            cur->getParent()->setColor(0);
-            grandparent->setColor(1);
-	  }
-	}
-	else if(cur->getParent()->getData() >= cur->getParent()->getParent()->getData() && cur->getData() >= cur->getParent()->getData()) {
-	  if(cur->getParent()->getData() > cur->getData()){
-            rightRotate(root, parent);
-            cur->getParent()->setColor(0);
-            grandparent->setColor(1);
-          }
-          else {
-            leftRotate(root, parent);
-            cur->getParent()->setColor(0);
-            grandparent->setColor(1);
-          }
-	}
-      }
+//balance after every addition
+void balance(Node* &root, Node* node) {
+    Node* parent = NULL;
+    Node* grandparent = NULL;
+
+    // Cases 1 and 2, root exists and parent is black
+    while ((node != root) && (node->getColor() == 1) && (node->getParent()->getColor() == 1)) {
+        parent = node->getParent();
+        grandparent = parent->getParent();
+
+        // Parent is the left child of grandparent
+        if (parent == grandparent->getLeft()) {
+            Node* uncle = grandparent->getRight();
+
+            // Case 3: Red uncle, left child
+            if (uncle != NULL && uncle->getColor() == 1) {
+                grandparent->setColor(1);  
+                parent->setColor(0);       
+                uncle->setColor(0);        
+                node = grandparent;        
+            } else {
+                // Case 4: left/right, rotate left
+                if (node == parent->getRight()) {
+                    leftRotate(root, parent);
+                    node = parent;
+                    parent = node->getParent();
+                }
+                // Case 5: left/left, rotate right
+                rightRotate(root, grandparent);
+                parent->setColor(0);         
+                grandparent->setColor(1);    
+                node = parent;               
+            }
+        } else {  //right parent
+            Node* uncle = grandparent->getLeft();
+
+            // Case 3: Red uncle
+            if (uncle != NULL && uncle->getColor() == 1) {
+                grandparent->setColor(1);  
+                parent->setColor(0);       
+                uncle->setColor(0);        
+                node = grandparent;        
+            } else {
+                // Case 4: Right/left, left child
+                if (node == parent->getLeft()) {
+                    rightRotate(root, parent);
+                    node = parent;
+                    parent = node->getParent();
+                }
+                // Case 5: Right/right, right child
+                leftRotate(root, grandparent);
+                parent->setColor(0);         
+                grandparent->setColor(1);    
+                node = parent;               
+            }
+        }
     }
-  }
+    root->setColor(0);  //black root
 }
+
 
 void leftRotate(Node* &root, Node* cur) {
    Node* rightN = cur->getRight();

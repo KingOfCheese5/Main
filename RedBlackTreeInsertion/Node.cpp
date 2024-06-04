@@ -58,15 +58,17 @@ Node* Node::getParent() {
 }
 
 //vikram vasudevan
-Node* Node::getUncle(){
-  Node* uncle = new Node();
-  if(this->getParent()->getData() <= this->getData()){
-    uncle = this->getParent()->getLeft();
+Node* Node::getUncle() {
+  Node* parent = this->getParent();
+  if (parent == NULL) return NULL;
+  Node* grandparent = parent->getParent();
+  if (grandparent == NULL) return NULL;
+  
+  if (parent == grandparent->getLeft()) {
+    return grandparent->getRight();
+  } else {
+    return grandparent->getLeft();
   }
-  else if(this->getParent()->getData() > this->getData()){
-    uncle = this->getParent()->getRight();
-  }
-  return uncle;
 }
 
 int Node::getData() {
@@ -74,5 +76,8 @@ int Node::getData() {
 }
 
 int Node::getColor() {
+  if(this == NULL) {
+    return 0; //null = black
+  }
   return color;
 }
