@@ -1,3 +1,7 @@
+//Name: Levi Lao
+//Date: 6/4/24
+//Project: RBT Deletion, use previous RBT framework and allow for nodes to be deleted and searched for
+
 #include <iostream>
 #include <string>
 #include <cstring>
@@ -14,6 +18,7 @@ void leftRotate(Node* &root, Node* cur);
 void rightRotate(Node* &root, Node* cur);
 void remove(Node* &root, Node* cur, int data);
 void doubleBlack(Node* &root, Node* cur);
+void search(int number, Node* node);
 
 int main() {
 
@@ -26,20 +31,23 @@ int main() {
   char printCopy[] = "print";
   char removeCopy[] = "remove";
   char quitCopy[] = "quit";
+  char searchCopy[] = "search";
   
   char addl[4];
   char printl[6];
   char removel[7];
   char quitl[5];
+  char searchl[7];
 
   cout << "RBT: Insertion" << endl;
 
   while(running == true) {
 
-    cout << "Enter add, print, or quit" << endl;
+    cout << "Enter add, print, remove, or quit" << endl;
     strcpy(addl, addCopy);
     strcpy(printl, printCopy);
     strcpy(removel, removeCopy);
+    strcpy(searchl, searchCopy);
     strcpy(quitl, quitCopy);
 
     cin.get(input, 81);
@@ -107,6 +115,13 @@ int main() {
       cin >> number;
       cin.get();
       remove(root, root, number);
+    }
+    if(strcmp(input, searchl) == 0) {
+      cout << "Enter value to be searched" << endl;
+      int number;
+      cin >> number;
+      cin.get();
+      search(number, root);
     }
 
     if(strcmp(input, quitl) == 0) {
@@ -385,12 +400,12 @@ void doubleBlack(Node* &root, Node* cur) {
         }
         // Continue handling the double black
         doubleBlack(root, cur);
-    } else { //black sibling
+    }
+    //black sibling
         //case 3: black parent, sibling, and children
-      if (parent->getColor() == 0 && sibling != NULL && (sibling->getColor() == 0) && (sibling->getLeft() == NULL || sibling->getLeft()->getColor() == 0) && (sibling->getRight() == NULL || sibling->getRight()->getColor() == 0)) {
+    else if (parent->getColor() == 0 && sibling != NULL && (sibling->getColor() == 0) && (sibling->getLeft() == NULL || sibling->getLeft()->getColor() == 0) && (sibling->getRight() == NULL || sibling->getRight()->getColor() == 0)) {
       sibling->setColor(1);
       doubleBlack(root, parent);
-	}
     }
     //case 4: red parent, black sibling
       else if (parent->getColor() == 1 && sibling != NULL && sibling->getColor() == 0 && (sibling->getLeft() == NULL || sibling->getLeft()->getColor() == 0) && (sibling->getRight() == NULL || sibling->getRight()->getColor() == 0)) {
@@ -436,5 +451,33 @@ void doubleBlack(Node* &root, Node* cur) {
                 }
             }
         }
+
+}
+
+//recurse through tree
+void search(int number, Node* node) {
+  //will be tested on root
+  if(node == NULL) {
+    return;
+  }
+  else {
+    //go left if value is smaller
+    if(node->getData() > number) {
+      search(number, node->getLeft());
     }
+    //go right if value is larger
+    else if(node->getData() < number) {
+      search(number, node->getRight());
+    }
+    //print if found
+    else if(node->getData() == number){
+      cout << "value found" << endl;
+      return;
+    }
+    else {
+      cout << "value does not exist" << endl;
+      return;
+    }
+  }
+
 }
